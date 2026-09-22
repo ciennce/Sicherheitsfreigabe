@@ -18,7 +18,7 @@
 
         public Safetycard GetCard(int Id)
         {
-            return safetycards[Id];
+            return safetycards.FirstOrDefault(i => i.GetSafetycard() == Id);
         }
 
     }
