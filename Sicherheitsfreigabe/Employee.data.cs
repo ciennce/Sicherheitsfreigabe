@@ -9,14 +9,11 @@
             employees = [];
         }
 
-
-        public int GetEmployee(int Id)
+        public string GetEmployee(int Id)
         {
-            var id = employees.FirstOrDefault(i => i.Equals(Id));
-            if (id == null) return 0;
-            return id; //error
+            var employee = employees.FirstOrDefault(i => i.GetId() == Id);
+            if(employee == null) return string.Empty;
+            return employee.GetName(); 
         }
-
-
     }
 }

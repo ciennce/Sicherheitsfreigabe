@@ -22,9 +22,14 @@
             return true;
         }
 
-        public static int GetId(Employee employee)
+        public int GetId()
         {
-            return employee.employeeId;
+            return employeeId;
+        }
+
+        public string GetName()
+        {
+            return name;
         }
 
     }
