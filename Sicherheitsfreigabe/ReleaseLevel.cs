@@ -3,7 +3,7 @@
     enum releaseLevel
     {
         green,
-        yellow,
+        blue,
         red
     }
 }
