@@ -3,10 +3,15 @@
     class Employee
     {
         private int employeeId { get; set; }
+
         private string name { get; set; }
+        
         private DateTime hiredDate { get; set; }
-        private DateTime birthday { get; set; };
+
+        private DateTime birthday { get; set; }
+
         private bool isOnVacation { get; set; }
+
         private bool isOnBusinessTrip { get; set; }
 
         public Employee(string pName, int pEmployeeId, bool pIsOnBusinessTrip, bool pIsOnVacation, DateTime pHiredDate, DateTime pBirthday)
