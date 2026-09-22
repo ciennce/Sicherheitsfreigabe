@@ -1,0 +1,163 @@
+<mxfile host="app.diagrams.net" agent="claude-code">
+  <diagram name="Klassendiagramm" id="klassendiagramm1">
+    <mxGraphModel dx="1285" dy="708" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mitarbeiter" parent="1" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;fontStyle=1;" value="Mitarbeiter" vertex="1">
+          <mxGeometry height="130" width="220" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="mitarbeiter_attr" parent="mitarbeiter" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="- MitarbeiterId: int&#xa;- Name: string&#xa;- IstImUrlaub: bool&#xa;- IstAufDienstreise: bool" vertex="1">
+          <mxGeometry height="70" width="220" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="mitarbeiter_div" parent="mitarbeiter" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="mitarbeiter_meth" parent="mitarbeiter" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="+ IstVerfuegbar(): bool" vertex="1">
+          <mxGeometry height="26" width="220" y="104" as="geometry" />
+        </mxCell>
+        <mxCell id="karte" parent="1" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;fontStyle=1;" value="Sicherheitskarte" vertex="1">
+          <mxGeometry height="112" width="220" x="360" y="166" as="geometry" />
+        </mxCell>
+        <mxCell id="karte_attr" parent="karte" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="- KartenId: int&#xa;- BesitzerId: int&#xa;- LetzteNutzung: DateTime&#xa;- Freigabestufe: Freigabestufe" vertex="1">
+          <mxGeometry height="70" width="220" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="karte_div" parent="karte" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="karte_meth" parent="karte" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="104" as="geometry" />
+        </mxCell>
+        <mxCell id="terminal" parent="1" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;fontStyle=1;" value="Terminal" vertex="1">
+          <mxGeometry height="100" width="240" x="680" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="terminal_attr" parent="terminal" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="" vertex="1">
+          <mxGeometry height="8" width="240" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="terminal_div" parent="terminal" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="240" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="terminal_meth" parent="terminal" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="+ CanAccess(karte, mitarbeiter): bool&#xa;+ Open(): void&#xa;+ Deny(): void" vertex="1">
+          <mxGeometry height="58" width="240" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="kdb" parent="1" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;fontStyle=1;" value="Sicherheitskartendatenbank" vertex="1">
+          <mxGeometry height="128" width="220" x="360" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="kdb_attr" parent="kdb" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="- karten: List&lt;Sicherheitskarte&gt;" vertex="1">
+          <mxGeometry height="26" width="220" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EnSmvtFBIsZt1OC_5l7L-1" parent="kdb" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="- karten: List&lt;Sicherheitskarte&gt;" vertex="1">
+          <mxGeometry height="26" width="220" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="kdb_div" parent="kdb" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="78" as="geometry" />
+        </mxCell>
+        <mxCell id="kdb_meth" parent="kdb" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="+ HasCard(id: int): bool&#xa;+ GetCard(id: int): Sicherheitskarte" vertex="1">
+          <mxGeometry height="42" width="220" y="86" as="geometry" />
+        </mxCell>
+        <mxCell id="steuer" parent="1" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;fontStyle=1;" value="Steuereinheit" vertex="1">
+          <mxGeometry height="68" width="240" x="680" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="steuer_attr" parent="steuer" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="" vertex="1">
+          <mxGeometry height="8" width="240" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="steuer_div" parent="steuer" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="240" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="steuer_meth" parent="steuer" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="+ Challenge(kartenId: int): void" vertex="1">
+          <mxGeometry height="26" width="240" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="enum" parent="1" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;fontStyle=1;" value="&lt;&lt;enumeration&gt;&gt;&#xa;Freigabestufe" vertex="1">
+          <mxGeometry height="94" width="220" x="360" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="enum_vals" parent="enum" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="Gruen&#xa;Gelb&#xa;Rot" vertex="1">
+          <mxGeometry height="58" width="220" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="e_karte_mitarbeiter" edge="1" parent="1" source="karte" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;endSize=10;startArrow=none;fontSize=11;" target="mitarbeiter" value="besitzt">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="120" />
+            </Array>
+            <mxPoint x="1" y="1" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_karte_mitarbeiter_lbl" connectable="0" parent="e_karte_mitarbeiter" style="edgeLabel;html=1;align=right;verticalAlign=bottom;resizable=0;points=[];fontSize=10;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_karte_enum" edge="1" parent="1" source="karte" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;endSize=10;dashed=1;fontSize=11;" target="enum">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="220" />
+              <mxPoint x="340" y="527.03" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_mdb_mitarbeiter" edge="1" parent="1" source="mdb" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamondThin;startFill=0;startSize=16;endArrow=none;fontSize=11;" target="mitarbeiter" value="0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_kdb_karte" edge="1" parent="1" source="kdb" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamondThin;startFill=0;startSize=16;endArrow=none;fontSize=11;" target="karte" value="0..*">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="230" />
+              <mxPoint x="480" y="230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_steuer_kdb" edge="1" parent="1" source="steuer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;endSize=10;dashed=1;exitX=0;exitY=0.5;" target="EnSmvtFBIsZt1OC_5l7L-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="405" />
+              <mxPoint x="630.03" y="405" />
+              <mxPoint x="630.03" y="404" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_steuer_terminal" edge="1" parent="1" source="steuer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;endSize=10;dashed=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="terminal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_terminal_karte" edge="1" parent="1" source="terminal" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;endSize=10;dashed=1;exitX=0.5;exitY=1;entryX=1;entryY=0.5;" target="karte">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="222" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_terminal_mitarbeiter" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;endSize=10;dashed=1;exitX=0.5;exitY=1;entryX=0.999;entryY=0.155;entryDx=0;entryDy=0;entryPerimeter=0;" target="mitarbeiter">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620" y="190" />
+              <mxPoint x="620" y="100" />
+              <mxPoint x="259.8" y="100" />
+            </Array>
+            <mxPoint x="800" y="190" as="sourcePoint" />
+            <mxPoint x="260" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EnSmvtFBIsZt1OC_5l7L-8" edge="1" parent="1" source="steuer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;endSize=10;dashed=1;" target="mdb" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="550" />
+              <mxPoint x="800" y="550" />
+            </Array>
+            <mxPoint x="800" y="428" as="sourcePoint" />
+            <mxPoint x="800" y="590" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mdb" parent="1" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;fontStyle=1;" value="Mitarbeiterdatenbank" vertex="1">
+          <mxGeometry height="86" width="220" x="690" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="mdb_attr" parent="mdb" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="- mitarbeiter: List&lt;Mitarbeiter&gt;" vertex="1">
+          <mxGeometry height="26" width="220" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="mdb_div" parent="mdb" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="mdb_meth" parent="mdb" style="text;html=1;align=left;verticalAlign=top;spacingLeft=4;spacingTop=-6;spacingBottom=0;whiteSpace=wrap;overflow=hidden;fontStyle=0;" value="+ GetEmployee(id: int): Mitarbeiter" vertex="1">
+          <mxGeometry height="26" width="220" y="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
