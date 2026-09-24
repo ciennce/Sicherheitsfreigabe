@@ -2,7 +2,7 @@
 {
     interface ITerminal
     {
-        public bool CanAccess();
+        public bool CanAccess(releaseLevel mode);
 
         public void Open();
 
