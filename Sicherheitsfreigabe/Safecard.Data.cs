@@ -16,9 +16,12 @@
             return true;
         }
 
-        public Safetycard GetCard(int Id)
+        public Safetycard? GetCard(int Id)
         {
-            return safetycards.FirstOrDefault(i => i.GetSafetycard() == Id);
+            var employee = safetycards.FirstOrDefault(c => c.GetSafetycard() == Id);
+            if (employee == null) return null;
+            return employee;
+
         }
 
     }
