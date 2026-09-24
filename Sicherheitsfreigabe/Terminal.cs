@@ -9,6 +9,7 @@
 
         public bool CanAccess(releaseLevel mode)
         {
+            
             switch (mode)
             {
                 case releaseLevel.green:
@@ -21,14 +22,14 @@
             return false;
         }
 
-        public void Deny()
+        public void Deny(Safetycard safetycard)
         {
-
+            
         }
 
-        public void Open()
+        public void Open(Safetycard safetycard)
         {
-
+            if()
         }
     }
 }

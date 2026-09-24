@@ -19,5 +19,13 @@ namespace Sicherheitsfreigabe
             safetycards.TryGetValue(Id, out var card);
             return card;
         }
+
+        public releaseLevel cardReleaselevel(int Id)
+        {
+            if (safetycards.TryGetValue(Id, out var card))
+            {
+                return safetycards.
+            }
+        }
     }
 }

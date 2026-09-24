@@ -23,7 +23,9 @@
             return cardId;
         }
 
-
-
+        public releaseLevel GetReleaseLevel()
+        {
+            return releaseLevel;
+        }
     }
 }

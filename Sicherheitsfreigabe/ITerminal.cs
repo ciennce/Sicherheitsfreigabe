@@ -4,8 +4,8 @@
     {
         public bool CanAccess(releaseLevel mode);
 
-        public void Open();
+        public void Open(Safetycard safetycard);
 
-        public void Deny();
+        public void Deny(Safetycard safetycard);
     }
 }
