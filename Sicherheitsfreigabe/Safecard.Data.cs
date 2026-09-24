@@ -1,28 +1,23 @@
-﻿namespace Sicherheitsfreigabe
+namespace Sicherheitsfreigabe
 {
     class SafeteycardData
     {
-        private List<Safetycard> safetycards;
+        private readonly Dictionary<int, Safetycard> safetycards = new();
 
-        public SafeteycardData()
+        public void Add(Safetycard card)
         {
-            safetycards = [];
+            safetycards[card.GetSafetycard()] = card;
         }
 
         public bool HasCard(int Id)
         {
-            var employee = safetycards.FirstOrDefault(i => i.GetSafetycard() == Id);
-            if (employee == null) return false;
-            return true;
+            return safetycards.ContainsKey(Id);
         }
 
         public Safetycard? GetCard(int Id)
         {
-            var employee = safetycards.FirstOrDefault(c => c.GetSafetycard() == Id);
-            if (employee == null) return null;
-            return employee;
-
+            safetycards.TryGetValue(Id, out var card);
+            return card;
         }
-
     }
 }

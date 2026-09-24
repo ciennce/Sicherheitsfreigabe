@@ -1,19 +1,18 @@
-﻿namespace Sicherheitsfreigabe
+namespace Sicherheitsfreigabe
 {
     class Employeedata
     {
-        private List<Employee> employees;
+        private readonly Dictionary<int, Employee> employees = new();
 
-        public Employeedata()
+        public void Add(Employee employee)
         {
-            employees = [];
+            employees[employee.GetId()] = employee;
         }
 
         public string GetEmployee(int Id)
         {
-            var employee = employees.FirstOrDefault(i => i.GetId() == Id);
-            if(employee == null) return string.Empty;
-            return employee.GetName();
+            employees.TryGetValue(Id, out var employee);
+            return employee?.GetName() ?? string.Empty;
         }
     }
 }
