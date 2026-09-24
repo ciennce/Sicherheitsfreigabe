@@ -2,7 +2,7 @@ namespace Sicherheitsfreigabe
 {
     class Employeedata
     {
-        private readonly Dictionary<int, Employee> employees = new();
+        private readonly Dictionary<int, Employee> employees = [];
 
         public void Add(Employee employee)
         {

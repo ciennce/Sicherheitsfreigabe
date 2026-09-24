@@ -2,7 +2,7 @@ namespace Sicherheitsfreigabe
 {
     class SafeteycardData
     {
-        private readonly Dictionary<int, Safetycard> safetycards = new();
+        private readonly Dictionary<int, Safetycard> safetycards = [];
 
         public void Add(Safetycard card)
         {
