@@ -2,10 +2,10 @@
 {
     interface ITerminal
     {
-        public bool CanAccess(releaseLevel mode);
+        public bool CanAccess(int id, SafeteycardData safetycard);
 
         public void Open();
 
-        public void Deny(Safetycard safetycard);
+        public void Deny();
     }
 }

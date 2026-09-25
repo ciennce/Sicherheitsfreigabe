@@ -4,9 +4,12 @@ namespace Sicherheitsfreigabe
     {
         private readonly Dictionary<int, Safetycard> safetycards = [];
 
-        public void Add(Safetycard card)
+        private readonly List<releaseLevel> releaseLevels= [];
+
+        public void Add(Safetycard card, releaseLevel release)
         {
             safetycards[card.GetSafetycard()] = card;
+            releaseLevels.Add(release);
         }
 
         public bool HasCard(int Id)
@@ -22,10 +25,8 @@ namespace Sicherheitsfreigabe
 
         public releaseLevel CardReleaselevel(int Id)
         {
-            if (safetycards.TryGetValue(Id, out var card))
-            {
-                return safetycards.
-            }
+            int index = releaseLevels.IndexOf((releaseLevel)Id);
+            return releaseLevels[index];
         }
     }
 }

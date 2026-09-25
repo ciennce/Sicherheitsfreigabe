@@ -1,35 +1,33 @@
-﻿namespace Sicherheitsfreigabe
+﻿using System.Runtime.InteropServices;
+
+namespace Sicherheitsfreigabe
 {
     class Terminal : ITerminal
     {
 
-        public Terminal()
-        {
-        }
+        public Terminal(){}
 
-        public bool CanAccess(releaseLevel mode)
+        public bool CanAccess(int id, SafeteycardData safetycard)
         {
-            
-            switch (mode)
+
+            switch (safetycard.CardReleaselevel(id))
             {
-                case releaseLevel.green:
-                    return true;
-                case releaseLevel.red:
-                    return true;
-                case releaseLevel.blue:
-                    return true;
+                case releaseLevel.green: Open();return true;
+                case releaseLevel.red: Open();return true;
+                case releaseLevel.blue: Open();return true;
             }
+            Deny();
             return false;
         }
 
-        public void Deny(Safetycard safetycard)
+        public void Deny()
         {
-            
+            Console.WriteLine("Access denied");
         }
 
         public void Open()
         {
-            if()
+            Console.WriteLine("Access granted");
         }
     }
 }
