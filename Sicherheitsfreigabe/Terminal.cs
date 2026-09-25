@@ -27,7 +27,7 @@
             
         }
 
-        public void Open(Safetycard safetycard)
+        public void Open()
         {
             if()
         }

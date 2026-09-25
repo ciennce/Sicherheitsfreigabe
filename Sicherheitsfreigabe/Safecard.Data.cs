@@ -20,7 +20,7 @@ namespace Sicherheitsfreigabe
             return card;
         }
 
-        public releaseLevel cardReleaselevel(int Id)
+        public releaseLevel CardReleaselevel(int Id)
         {
             if (safetycards.TryGetValue(Id, out var card))
             {
