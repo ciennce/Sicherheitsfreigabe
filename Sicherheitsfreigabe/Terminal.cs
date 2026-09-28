@@ -2,10 +2,10 @@
 {
     class Terminal : ITerminal
     {
-        public bool CanAccess(int id, SafeteycardData safetycard)
+        public bool CanAccess(int id)
         {
 
-            switch (safetycard.CardReleaselevel(id))
+            switch (SafeteycardData.CardReleaselevel(id))
             {
                 case releaseLevel.green: return false;
                 case releaseLevel.red: return true;

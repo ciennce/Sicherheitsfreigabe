@@ -1,16 +1,26 @@
 ﻿namespace Sicherheitsfreigabe
 {
-    class ConstrolSection : Terminal
+    class ConstrolSection
     {
-        public void Challange(SafeteycardData card, int id)
+        private Terminal terminal;
+        public ConstrolSection()
         {
-            card.GetCard(id);
+            Terminal terminal = new();
         }
 
-        public void Control(int id, SafeteycardData safetycard)
+        public void Challange(int id)
         {
-            if (CanAccess(id, safetycard)) Open();
-            Deny();
+            SafeteycardData.GetCard(id);
+        }
+
+        public void Control(int id)
+        {
+            if (!terminal.CanAccess(id))
+            {
+                terminal.Deny();
+                return;
+            }
+            terminal.Open();
         }
     }
 }
