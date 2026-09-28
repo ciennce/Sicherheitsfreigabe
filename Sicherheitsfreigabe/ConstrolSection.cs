@@ -2,9 +2,9 @@
 {
     class ConstrolSection
     {
-        public void Challange(int id)
+        public void Challange(SafeteycardData card, int id)
         {
-            
+            card.GetCard(id);
         }
     }
 }
