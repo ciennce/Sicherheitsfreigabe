@@ -1,9 +1,9 @@
 ﻿namespace Sicherheitsfreigabe
 {
-    class ConstrolSection
+    class ControlSection
     {
         private Terminal terminal;
-        public ConstrolSection()
+        public ControlSection()
         {
             terminal = new();
         }
