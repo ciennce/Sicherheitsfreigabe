@@ -12,9 +12,9 @@ namespace Sicherheitsfreigabe
 
             switch (safetycard.CardReleaselevel(id))
             {
-                case releaseLevel.green: Open();return true;
+                case releaseLevel.green: Deny();return false;
                 case releaseLevel.red: Open();return true;
-                case releaseLevel.blue: Open();return true;
+                case releaseLevel.blue: Deny();return false;
             }
             Deny();
             return false;
