@@ -11,7 +11,7 @@
                 case releaseLevel.red: return true;
                 case releaseLevel.blue: return false;
             }
-            Deny();
+            Console.WriteLine("There currently is no safety level to this card.");
             return false;
         }
 

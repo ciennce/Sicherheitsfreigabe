@@ -5,7 +5,7 @@
         private Terminal terminal;
         public ConstrolSection()
         {
-            Terminal terminal = new();
+            terminal = new();
         }
 
         public void Challange(int id)
