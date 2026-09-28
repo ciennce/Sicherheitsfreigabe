@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Sicherheitsfreigabe
+﻿namespace Sicherheitsfreigabe
 {
     class Terminal : ITerminal
     {
@@ -9,9 +7,9 @@ namespace Sicherheitsfreigabe
 
             switch (safetycard.CardReleaselevel(id))
             {
-                case releaseLevel.green: Deny(); return false;
-                case releaseLevel.red: Open(); return true;
-                case releaseLevel.blue: Deny(); return false;
+                case releaseLevel.green: return false;
+                case releaseLevel.red: return true;
+                case releaseLevel.blue: return false;
             }
             Deny();
             return false;
