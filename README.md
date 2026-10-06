@@ -49,7 +49,8 @@ Die Datenmodell-Ebene (Schritte 1–3 der Vorgehensweise) steht größtenteils, 
 
 ### 3. Datenbankklassen
 - `SafeteycardData.HasCard` / `GetCard` sind vorhanden wie gefordert. ✅
-- **Bug in `Employeedata.GetEmployee`** (`Employee.data.cs:12-16`): Laut Diagramm soll die Methode `Mitarbeiter` zurückgeben (`GetEmployee(id: int): Mitarbeiter`), aktuell gibt sie nur `employee?.GetName()`, also einen `string`, zurück. Dadurch geht die Information verloren, ob der Mitarbeiter im Urlaub/auf Dienstreise ist – genau die Information, die später für `CanAccess` gebraucht wird.
+- **Bug in `Employeedata.GetEmployee`** (`Employee.data.cs:12-16`): Laut Diagramm soll die Methode `Mitarbeiter` zurückgeben (`GetEmployee(id: int): Mitarbeiter`), aktuell gibt sie nur `employee?.GetName()`, also einen `string`, zurück. ✅
+- Dadurch geht die Information verloren, ob der Mitarbeiter im Urlaub/auf Dienstreise ist – genau die Information, die später für `CanAccess` gebraucht wird.
 - **Bug in `SafeteycardData.CardReleaselevel`** (`Safecard.Data.cs:26-30`):
   ```csharp
   int index = releaseLevels.IndexOf((releaseLevel)Id);
