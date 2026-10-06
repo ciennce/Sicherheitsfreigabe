@@ -1,15 +1,14 @@
+using System.ComponentModel.Design;
+
 namespace Sicherheitsfreigabe
 {
     static class SafeteycardData
     {
         private static readonly Dictionary<int, Safetycard> safetycards = [];
 
-        private static readonly List<releaseLevel> releaseLevels= [];
-
         public static void Add(Safetycard card, releaseLevel release)
         {
             safetycards[card.GetSafetycard()] = card;
-            releaseLevels.Add(release);
         }
 
         public static bool HasCard(int Id)
@@ -25,8 +24,9 @@ namespace Sicherheitsfreigabe
 
         public static releaseLevel CardReleaselevel(int Id)
         {
-            int index = releaseLevels.IndexOf((releaseLevel)Id);
-            return releaseLevels[index];
+            GetCard(Id)?.GetReleaseLevel();
+            return releaseLevel.none;
+
         }
     }
 }

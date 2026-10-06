@@ -4,6 +4,7 @@
     {
         green,
         blue,
-        red
+        red,
+        none
     }
 }

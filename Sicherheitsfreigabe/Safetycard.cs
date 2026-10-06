@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Sicherheitsfreigabe
+﻿namespace Sicherheitsfreigabe 
 {
     class Safetycard
     {
@@ -14,7 +12,7 @@ namespace Sicherheitsfreigabe
 
         public Safetycard(int pCardId, releaseLevel pReleaseLevel, int pOwnerId, DateTime pLastUsed)
         {
-            cardId = pCardId; 
+            cardId = pCardId;
             releaseLevel = pReleaseLevel;
             ownerId = pOwnerId;
             lastUsed = pLastUsed;
