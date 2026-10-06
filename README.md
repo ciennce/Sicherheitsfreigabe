@@ -67,10 +67,10 @@ Fehlt komplett – keine Datei/Methode, die die geforderten mindestens 10 Mitarb
 - `Terminal.CanAccess` (`Terminal.cs:10-21`) ruft `Open()`/`Deny()` **selbst** auf. Die Vorgehensweise verlangt aber ausdrücklich, dass `CanAccess` reine Prüf-Logik ist, **ohne** den Türmechanismus selbst auszulösen (Single-Responsibility – das soll die Steuereinheit übernehmen).✅
 - Der `switch` gewährt für **alle drei** Stufen (`green`, `blue`/„gelb", `red`) Zugriff und öffnet immer – es gibt aktuell keinerlei echte Prüfung, ob die Kartenstufe zur Terminal-/Türstufe passt.✅
 - Das Diagramm sieht `CanAccess(karte, mitarbeiter): bool` vor – die aktuelle Signatur `CanAccess(int id, SafeteycardData safetycard)` bekommt gar keinen `Mitarbeiter` übergeben, kann also die geforderte Plausibilitätsprüfung (Urlaub/Dienstreise) gar nicht durchführen.
-- Unbenutztes `using System.Runtime.InteropServices;` in `Terminal.cs:1`.
+- Unbenutztes `using System.Runtime.InteropServices;` in `Terminal.cs:1`.✅
 
 ### 6. Steuereinheit
-Fehlt vollständig. Es gibt keine Klasse mit `Challenge(kartenId)`, die Karte nachschlägt → Mitarbeiter ermittelt → Terminal fragt → Tür öffnen/verweigern lässt → Nutzungsdatum aktualisiert.
+Fehlt vollständig. Es gibt keine Klasse mit `Challenge(kartenId)`, die Karte nachschlägt → Mitarbeiter ermittelt → Terminal fragt → Tür öffnen/verweigern lässt → Nutzungsdatum aktualisiert.✅
 
 ### 7. Main/Programmablauf
 Es existiert keine `Program.cs` im Projekt. Da `Sicherheitsfreigabe.csproj` `<OutputType>Exe</OutputType>` setzt, aber kein Einstiegspunkt vorhanden ist, **lässt sich das Projekt aktuell nicht bauen**.
