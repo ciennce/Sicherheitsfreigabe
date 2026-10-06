@@ -9,10 +9,10 @@ namespace Sicherheitsfreigabe
             employees[employee.GetId()] = employee;
         }
 
-        public string GetEmployee(int Id)
+        public Employee? GetEmployee(int Id)
         {
             employees.TryGetValue(Id, out var employee);
-            return employee?.GetName() ?? string.Empty;
+            return employee?.GetName(Id);
         }
     }
 }

@@ -2,43 +2,44 @@
 {
     abstract class Employee
     {
-        private int employeeId { get; set; }
+        private int EmployeeId { get; set; }
 
-        private string name { get; set; }
+        private string Name { get; set; }
         
-        private DateTime hiredDate { get; set; }
+        private DateTime HiredDate { get; set; }
 
-        private DateTime birthday { get; set; }
+        private DateTime Birthday { get; set; }
 
-        private bool isOnVacation { get; set; }
+        private bool IsOnVacation { get; set; }
 
-        private bool isOnBusinessTrip { get; set; }
+        private bool IsOnBusinessTrip { get; set; }
 
         public Employee(string pName, int pEmployeeId, bool pIsOnBusinessTrip, bool pIsOnVacation, DateTime pHiredDate, DateTime pBirthday)
         {
-            name = pName;
-            employeeId = pEmployeeId;
-            isOnBusinessTrip = pIsOnBusinessTrip;
-            isOnVacation = pIsOnVacation;
-            hiredDate = pHiredDate;
-            birthday = pBirthday;
+            Name = pName;
+            EmployeeId = pEmployeeId;
+            IsOnBusinessTrip = pIsOnBusinessTrip;
+            IsOnVacation = pIsOnVacation;
+            HiredDate = pHiredDate;
+            Birthday = pBirthday;
         }
 
         public static bool isAvailable(Employee employee)
         {
-            if (employee.isOnVacation) return false;
-            if (employee.isOnBusinessTrip) return true;
+            if (employee.IsOnVacation) return false;
+            if (employee.IsOnBusinessTrip) return true;
             return true;
         }
 
         public int GetId()
         {
-            return employeeId;
+            return EmployeeId;
         }
 
-        public string GetName()
+        public Employee? GetName(int id)
         {
-            return name;
+            if (GetId() == id) return this;
+            return null;
         }
 
     }
