@@ -33,10 +33,10 @@ Die Datenmodell-Ebene (Schritte 1–3 der Vorgehensweise) steht größtenteils, 
 - Unidirektionale Beziehung Karte → Mitarbeiter ist korrekt umgesetzt: `Safetycard` speichert nur `ownerId` (int), `Employee` kennt keine Karte. ✅
 - Freigabestufe als Enum umgesetzt (`ReleaseLevel.cs`). ✅
 - **Abweichung vom eigenen Diagramm:** Das Klassendiagramm sieht die Werte `Gruen, Gelb, Rot` vor, im Code steht `green, blue, red` (`ReleaseLevel.cs:5-7`) – „Gelb" wurde zu „blue". Vermutlich ein Versehen beim Tippen.
-- `Steuereinheit` ist im Diagramm vorhanden, im Code nicht.
+- `Steuereinheit` ist im Diagramm vorhanden, im Code nicht.✅
 
 ### 2. Datenklassen
-- `Employee`: Felder passen (Id, Name, HiredDate, Birthday, IsOnVacation, IsOnBusinessTrip).
+- `Employee`: Felder passen (Id, Name, HiredDate, Birthday, IsOnVacation, IsOnBusinessTrip).✅
 - Fragwürdig: `Employee.isAvailable()` (`Employee.cs:27-32`):
   ```csharp
   if (employee.isOnVacation) return false;
@@ -45,7 +45,7 @@ Die Datenmodell-Ebene (Schritte 1–3 der Vorgehensweise) steht größtenteils, 
   ```
   Die beiden letzten Zeilen sind äquivalent – der `isOnBusinessTrip`-Zweig hat aktuell keinen Effekt. Die Aufgabenstellung nennt „Urlaub/Dienstreise" aber explizit als zwei unterschiedliche Plausibilitätsfälle für Schritt 8 (Testfall „rote Karte, Dienstreise"). Hier sollte überlegt werden, ob Dienstreise wirklich identisch zu „verfügbar" behandelt werden soll oder nicht.
 - `Safetycard`: Felder entsprechen exakt der Vorgabe (Karten-ID, Besitzer-Id, letztes Nutzungsdatum, Freigabestufe). ✅
-- Namenskonvention: `isAvailable`, `releaseLevel` (Enum) sind lowerCamelCase statt der in C# üblichen PascalCase-Konvention (`IsAvailable`, `ReleaseLevel`). Kein funktionaler Fehler, aber inkonsistent zur restlichen Codebasis (z.B. `GetId`, `GetName` sind PascalCase).
+- Namenskonvention: `isAvailable`, `releaseLevel` (Enum) sind lowerCamelCase statt der in C# üblichen PascalCase-Konvention (`IsAvailable`, `ReleaseLevel`). Kein funktionaler Fehler, aber inkonsistent zur restlichen Codebasis (z.B. `GetId`, `GetName` sind PascalCase).✅
 
 ### 3. Datenbankklassen
 - `SafeteycardData.HasCard` / `GetCard` sind vorhanden wie gefordert. ✅
