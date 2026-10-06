@@ -51,14 +51,14 @@ Die Datenmodell-Ebene (Schritte 1–3 der Vorgehensweise) steht größtenteils, 
 - `SafeteycardData.HasCard` / `GetCard` sind vorhanden wie gefordert. ✅
 - **Bug in `Employeedata.GetEmployee`** (`Employee.data.cs:12-16`): Laut Diagramm soll die Methode `Mitarbeiter` zurückgeben (`GetEmployee(id: int): Mitarbeiter`), aktuell gibt sie nur `employee?.GetName()`, also einen `string`, zurück. ✅
 - Dadurch geht die Information verloren, ob der Mitarbeiter im Urlaub/auf Dienstreise ist – genau die Information, die später für `CanAccess` gebraucht wird.
-- **Bug in `SafeteycardData.CardReleaselevel`** (`Safecard.Data.cs:26-30`):
+- **Bug in `SafeteycardData.CardReleaselevel`** (`Safecard.Data.cs:26-30`): 
   ```csharp
   int index = releaseLevels.IndexOf((releaseLevel)Id);
   return releaseLevels[index];
   ```
   Hier wird die Karten-`Id` direkt in einen `releaseLevel`-Enum-Wert gecastet und dessen Position in der separaten `releaseLevels`-Liste gesucht. Das hat keinen Bezug zur tatsächlich gespeicherten Karte. Beispiel: Karte mit `Id = 5` würde als `(releaseLevel)5` interpretiert (out of range) und dann in der Liste gesucht – das Ergebnis ist zufällig/falsch. Richtig wäre `GetCard(Id)?.GetReleaseLevel()`.
 - Die separate `releaseLevels`-Liste in `SafeteycardData` ist redundant, weil jede `Safetycard` ihr Level selbst kennt (`GetReleaseLevel()`) – sie ist die Ursache des obigen Bugs und kann ersatzlos entfernt werden.
-- Zum Lebenszyklus-Gedanken aus der Vorgehensweise (Singleton vs. einmal erzeugte Instanz): kann noch nicht bewertet werden, da es noch kein `Main` gibt, das die Datenbanken instanziiert.
+- Zum Lebenszyklus-Gedanken aus der Vorgehensweise (Singleton vs. einmal erzeugte Instanz): kann noch nicht bewertet werden, da es noch kein `Main` gibt, das die Datenbanken instanziiert.✅
 
 ### 4. Seed-Daten
 Fehlt komplett – keine Datei/Methode, die die geforderten mindestens 10 Mitarbeiter (davon 4 mit „rot": 1 Urlaub, 1 Dienstreise, 2 anwesend) und die zugehörigen Karten anlegt.
