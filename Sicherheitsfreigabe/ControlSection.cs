@@ -1,4 +1,6 @@
-﻿namespace Sicherheitsfreigabe
+﻿using System.Numerics;
+
+namespace Sicherheitsfreigabe
 {
     class ControlSection
     {

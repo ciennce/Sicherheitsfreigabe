@@ -1,6 +1,6 @@
 ﻿namespace Sicherheitsfreigabe
 {
-    class Employee
+    abstract class Employee
     {
         private int employeeId { get; set; }
 
