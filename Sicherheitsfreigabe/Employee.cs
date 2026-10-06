@@ -36,7 +36,7 @@
             return EmployeeId;
         }
 
-        public Employee? GetName(int id)
+        public Employee? GetById(int id)
         {
             if (GetId() == id) return this;
             return null;

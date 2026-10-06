@@ -12,7 +12,7 @@ namespace Sicherheitsfreigabe
         public Employee? GetEmployee(int Id)
         {
             employees.TryGetValue(Id, out var employee);
-            return employee?.GetName(Id);
+            return employee?.GetById(Id);
         }
     }
 }
