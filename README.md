@@ -64,8 +64,8 @@ Die Datenmodell-Ebene (Schritte 1–3 der Vorgehensweise) steht größtenteils, 
 Fehlt komplett – keine Datei/Methode, die die geforderten mindestens 10 Mitarbeiter (davon 4 mit „rot": 1 Urlaub, 1 Dienstreise, 2 anwesend) und die zugehörigen Karten anlegt.
 
 ### 5. Terminal
-- `Terminal.CanAccess` (`Terminal.cs:10-21`) ruft `Open()`/`Deny()` **selbst** auf. Die Vorgehensweise verlangt aber ausdrücklich, dass `CanAccess` reine Prüf-Logik ist, **ohne** den Türmechanismus selbst auszulösen (Single-Responsibility – das soll die Steuereinheit übernehmen).
-- Der `switch` gewährt für **alle drei** Stufen (`green`, `blue`/„gelb", `red`) Zugriff und öffnet immer – es gibt aktuell keinerlei echte Prüfung, ob die Kartenstufe zur Terminal-/Türstufe passt.
+- `Terminal.CanAccess` (`Terminal.cs:10-21`) ruft `Open()`/`Deny()` **selbst** auf. Die Vorgehensweise verlangt aber ausdrücklich, dass `CanAccess` reine Prüf-Logik ist, **ohne** den Türmechanismus selbst auszulösen (Single-Responsibility – das soll die Steuereinheit übernehmen).✅
+- Der `switch` gewährt für **alle drei** Stufen (`green`, `blue`/„gelb", `red`) Zugriff und öffnet immer – es gibt aktuell keinerlei echte Prüfung, ob die Kartenstufe zur Terminal-/Türstufe passt.✅
 - Das Diagramm sieht `CanAccess(karte, mitarbeiter): bool` vor – die aktuelle Signatur `CanAccess(int id, SafeteycardData safetycard)` bekommt gar keinen `Mitarbeiter` übergeben, kann also die geforderte Plausibilitätsprüfung (Urlaub/Dienstreise) gar nicht durchführen.
 - Unbenutztes `using System.Runtime.InteropServices;` in `Terminal.cs:1`.
 
