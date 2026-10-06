@@ -57,7 +57,7 @@ Die Datenmodell-Ebene (Schritte 1–3 der Vorgehensweise) steht größtenteils, 
   return releaseLevels[index];
   ```
   Hier wird die Karten-`Id` direkt in einen `releaseLevel`-Enum-Wert gecastet und dessen Position in der separaten `releaseLevels`-Liste gesucht. Das hat keinen Bezug zur tatsächlich gespeicherten Karte. Beispiel: Karte mit `Id = 5` würde als `(releaseLevel)5` interpretiert (out of range) und dann in der Liste gesucht – das Ergebnis ist zufällig/falsch. Richtig wäre `GetCard(Id)?.GetReleaseLevel()`.✅
-- Die separate `releaseLevels`-Liste in `SafeteycardData` ist redundant, weil jede `Safetycard` ihr Level selbst kennt (`GetReleaseLevel()`) – sie ist die Ursache des obigen Bugs und kann ersatzlos entfernt werden.
+- Die separate `releaseLevels`-Liste in `SafeteycardData` ist redundant, weil jede `Safetycard` ihr Level selbst kennt (`GetReleaseLevel()`) – sie ist die Ursache des obigen Bugs und kann ersatzlos entfernt werden.✅
 - Zum Lebenszyklus-Gedanken aus der Vorgehensweise (Singleton vs. einmal erzeugte Instanz): kann noch nicht bewertet werden, da es noch kein `Main` gibt, das die Datenbanken instanziiert.✅
 
 ### 4. Seed-Daten
