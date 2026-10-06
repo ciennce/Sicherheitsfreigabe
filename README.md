@@ -82,7 +82,7 @@ Noch nicht sinnvoll möglich, da der Kernablauf (Steuereinheit, Main) fehlt.
 Laut Aufgabe optional – bewusst noch nicht begonnen, kein Handlungsbedarf.
 
 ## Weitere Beobachtungen (Code-Qualität, keine Blocker)
-- Tippfehler/Inkonsistenz: Klasse heißt `SafeteycardData` (Datei `Safecard.Data.cs`), während die zugehörige Datenklasse korrekt `Safetycard` heißt.
+- Tippfehler/Inkonsistenz: Klasse heißt `SafeteycardData` (Datei `Safecard.Data.cs`), während die zugehörige Datenklasse korrekt `Safetycard` heißt.✅
 - Dateibenennung uneinheitlich: `Employee.data.cs` vs. `Safecard.Data.cs` (unterschiedliche Groß-/Kleinschreibung, unterschiedliches Namensschema).
 
 ## Empfohlene nächste Schritte (Priorität)
