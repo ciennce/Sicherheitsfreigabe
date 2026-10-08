@@ -22,12 +22,14 @@ namespace Sicherheitsfreigabe
 
         public static ReleaseLevel GetCardReleaselevel(int Id)
         {
-            return SafeteycardData.GetCard(Id)?.GetReleaseLevel() ?? ReleaseLevel.none;
+            return SafeteycardData.GetCard(Id)?
+                .GetReleaseLevel() ?? ReleaseLevel.none;
         }
 
         public static Sector GetCardSector(int Id)
         {
-            return SafeteycardData.GetCard(Id)?.GetSector() ?? Sector.none;
+            return SafeteycardData.GetCard(Id)?
+                .GetSector() ?? Sector.none;
         }
     }
 }
