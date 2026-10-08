@@ -26,9 +26,12 @@
 
         public static bool isAvailable(Employee employee)
         {
-            if (employee.IsOnVacation) return false;
-            if (employee.IsOnBusinessTrip) return true;
-            return true;
+            return employee switch
+            {
+                { IsOnBusinessTrip: true } => true,
+                { IsOnVacation: true } => false,
+                _ => true
+            };
         }
 
         public int GetId()

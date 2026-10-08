@@ -4,15 +4,12 @@
     {
         public bool CanAccess(int id)
         {
-
-            switch (SafeteycardData.GetCardReleaselevel(id))
+            bool result = SafeteycardData.GetCardReleaselevel(id) switch
             {
-                case ReleaseLevel.green: return false;
-                case ReleaseLevel.red: return true;
-                case ReleaseLevel.blue: return false;
-            }
-            Console.WriteLine("There currently is no safety level to this card.");
-            return false;
+                ReleaseLevel.red => true,
+                _ => false
+            };
+            return result;
         }
 
         public void Deny()
