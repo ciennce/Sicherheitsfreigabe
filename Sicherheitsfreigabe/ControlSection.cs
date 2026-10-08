@@ -1,5 +1,4 @@
 ﻿using System.Dynamic;
-using System.Numerics;
 
 namespace Sicherheitsfreigabe
 {
@@ -9,7 +8,6 @@ namespace Sicherheitsfreigabe
         public ControlSection()
         {
             terminal = new();
-            dynamic employee = new ExpandoObject(); //
         }
 
         public void Challange(int id)

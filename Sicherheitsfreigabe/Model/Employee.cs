@@ -12,7 +12,7 @@
 
         private bool IsOnVacation { get; set; }
 
-        private bool IsOnBusinessTrip { get; set; 
+        private bool IsOnBusinessTrip { get; set; }
 
         public Employee(string pName, int pEmployeeId, bool pIsOnBusinessTrip, bool pIsOnVacation, DateTime pHiredDate, DateTime pBirthday,Sector pSector)
         {
