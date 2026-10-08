@@ -24,15 +24,7 @@
             Birthday = pBirthday;
         }
 
-        public static bool isAvailable(Employee employee)
-        {
-            return employee switch
-            {
-                { IsOnBusinessTrip: true } => true,
-                { IsOnVacation: true } => false,
-                _ => true
-            };
-        }
+        public bool IsAvailable() => !IsOnVacation && !IsOnBusinessTrip;
 
         public int GetId()
         {
