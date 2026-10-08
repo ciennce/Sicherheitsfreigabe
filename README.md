@@ -53,7 +53,6 @@ Seit dem letzten Stand hat sich einiges getan: `GetEmployee` liefert jetzt ein `
    return GetCard(Id)?.GetReleaseLevel() ?? releaseLevel.none;
    ```
    ✳️ **FIXED**
-   ```
 
 4. **`Employee` ist `abstract`, aber es gibt keine Unterklassen** (`Employee.cs:3`). Damit kann kein einziger Mitarbeiter erzeugt werden → Seed-Daten unmöglich. Entweder `abstract` entfernen oder konkrete Unterklassen anlegen (vermutlich über das neue `Sector`-Enum gedacht, z.B. `HrEmployee`, `LogisticEmployee` …). Wenn Vererbung nicht wirklich gebraucht wird: einfacher ein Feld `Sector` in `Employee`.
 
