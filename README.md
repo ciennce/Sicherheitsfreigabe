@@ -52,10 +52,12 @@ Seit dem letzten Stand hat sich einiges getan: `GetEmployee` liefert jetzt ein `
    ```csharp
    return GetCard(Id)?.GetReleaseLevel() ?? releaseLevel.none;
    ```
+   ✳️ **FIXED**
+   ```
 
-3. **`Employee` ist `abstract`, aber es gibt keine Unterklassen** (`Employee.cs:3`). Damit kann kein einziger Mitarbeiter erzeugt werden → Seed-Daten unmöglich. Entweder `abstract` entfernen oder konkrete Unterklassen anlegen (vermutlich über das neue `Sector`-Enum gedacht, z.B. `HrEmployee`, `LogisticEmployee` …). Wenn Vererbung nicht wirklich gebraucht wird: einfacher ein Feld `Sector` in `Employee`.
+4. **`Employee` ist `abstract`, aber es gibt keine Unterklassen** (`Employee.cs:3`). Damit kann kein einziger Mitarbeiter erzeugt werden → Seed-Daten unmöglich. Entweder `abstract` entfernen oder konkrete Unterklassen anlegen (vermutlich über das neue `Sector`-Enum gedacht, z.B. `HrEmployee`, `LogisticEmployee` …). Wenn Vererbung nicht wirklich gebraucht wird: einfacher ein Feld `Sector` in `Employee`.
 
-4. **`ControlSection.Challange` tut nichts** (`ControlSection.cs:13-16`): Das Ergebnis von `GetCard(id)` wird verworfen. Laut Diagramm soll `Challenge(kartenId)` den gesamten Ablauf steuern:
+5. **`ControlSection.Challange` tut nichts** (`ControlSection.cs:13-16`): Das Ergebnis von `GetCard(id)` wird verworfen. Laut Diagramm soll `Challenge(kartenId)` den gesamten Ablauf steuern:
    1. Karte nachschlagen (`HasCard` / `GetCard`) – unbekannte Karte → `Deny()`
    2. Besitzer über `ownerId` in `Employeedata` holen
    3. `terminal.CanAccess(karte, mitarbeiter)` fragen
