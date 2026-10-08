@@ -1,97 +1,100 @@
-
+<a href="https://github.com/ciennce/Sicherheitsfreigabe/commit/0dbe541ec41f002a95f8ab7b0906adf44bb621ea">Claude usage:<a>
 
 ## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Recent activity [![Time period](https://images.repography.com/159967951/ciennce/Sicherheitsfreigabe/recent-activity/TSNXUjia3BXS8LN7uyAiHNQySTopZ9CZiAcRgM9_FWA/yUM1eJXmkgO7vzdMwOdXWtgQkaeoJCh1u342uxA_JJ4_badge.svg)](https://repography.com)
 [![Timeline graph](https://images.repography.com/159967951/ciennce/Sicherheitsfreigabe/recent-activity/TSNXUjia3BXS8LN7uyAiHNQySTopZ9CZiAcRgM9_FWA/yUM1eJXmkgO7vzdMwOdXWtgQkaeoJCh1u342uxA_JJ4_timeline.svg)](https://github.com/ciennce/Sicherheitsfreigabe/commits)
 [![Top contributors](https://images.repography.com/159967951/ciennce/Sicherheitsfreigabe/recent-activity/TSNXUjia3BXS8LN7uyAiHNQySTopZ9CZiAcRgM9_FWA/yUM1eJXmkgO7vzdMwOdXWtgQkaeoJCh1u342uxA_JJ4_users.svg)](https://github.com/ciennce/Sicherheitsfreigabe/graphs/contributors)
-
 # Fortschrittsbewertung – Sicherheitsfreigabe
 
-Stand: 2026-09-25, Abgleich von Code, Klassendiagramm (`Infos/Sicherheitsfreigabe-Klassendiagramm.drawio`) und `Vorgehensweise-Sicherheitsfreigabe.txt`.
+Stand: 2026-10-06 (nach Commit `8a07b0c` „fixed CardRelesaseLevel Bug“). Abgleich von Code, Klassendiagramm (`Infos/Sicherheitsfreigabe-Klassendiagramm.drawio`) und Vorgehensweise.
 
 ## Kurzfazit
 
-Die Datenmodell-Ebene (Schritte 1–3 der Vorgehensweise) steht größtenteils, hat aber zwei konkrete Bugs. Alles ab Schritt 4 (Seed-Daten, Terminal-Logik, Steuereinheit, Main, Tests) fehlt noch bzw. ist unvollständig. **Das Projekt kompiliert aktuell nicht** – `OutputType` ist `Exe`, aber es gibt keine `Program.cs` / keinen `Main`.
+Seit dem letzten Stand hat sich einiges getan: `GetEmployee` liefert jetzt ein `Employee`, die redundante `releaseLevels`-Liste ist weg, `CanAccess` ruft `Open()`/`Deny()` nicht mehr selbst auf und es gibt eine erste `ControlSection` (Steuereinheit). **Aber:** Der `CardReleaselevel`-Fix ist noch nicht wirksam (gibt immer `none` zurück), `Employee` ist jetzt `abstract` ohne Unterklassen (kann also nicht instanziiert werden), und **das Projekt kompiliert weiterhin nicht**, weil `Program.cs` / `Main` fehlt.
 
 ## Abgleich mit der 10-Schritte-Vorgehensweise
 
 | # | Schritt | Status |
 |---|---------|--------|
-| 1 | Modell entwerfen | ⚠️ teilweise |
-| 2 | Datenklassen (Mitarbeiter, Sicherheitskarte) | ⚠️ weitgehend, ein Logik-Punkt fragwürdig |
-| 3 | Datenbankklassen | ⚠️ vorhanden, aber mit Bug |
+| 1 | Modell entwerfen | ⚠️ Enum-Werte weichen vom Diagramm ab |
+| 2 | Datenklassen (Mitarbeiter, Sicherheitskarte) | ⚠️ `Employee` abstrakt ohne Unterklassen, `Safetycard` fehlen Getter/Setter |
+| 3 | Datenbankklassen | ⚠️ `CardReleaselevel` weiterhin kaputt |
 | 4 | Seed-Daten | ❌ fehlt |
-| 5 | Terminal | ⚠️ verstößt gegen eigene Vorgabe |
-| 6 | Steuereinheit | ❌ fehlt komplett |
-| 7 | Main/Programmablauf | ❌ fehlt komplett |
+| 5 | Terminal | ⚠️ ohne Mitarbeiter-Prüfung, Signatur weicht vom Diagramm ab |
+| 6 | Steuereinheit | ⚠️ angefangen (`ControlSection`), Ablauf unvollständig |
+| 7 | Main/Programmablauf | ❌ fehlt – Projekt baut nicht |
 | 8 | Tests | ❌ noch nicht möglich |
-| 9 | Protokollsystem (optional) | ❌ noch offen (ok, optional) |
+| 9 | Protokollsystem (optional) | ❌ offen (ok, optional) |
 | 10 | Abgabe | – |
 
-## Details
+## Bereits erledigt ✅
 
-### 1. Modell
-- Unidirektionale Beziehung Karte → Mitarbeiter ist korrekt umgesetzt: `Safetycard` speichert nur `ownerId` (int), `Employee` kennt keine Karte. ✅
-- Freigabestufe als Enum umgesetzt (`ReleaseLevel.cs`). ✅
-- **Abweichung vom eigenen Diagramm:** Das Klassendiagramm sieht die Werte `Gruen, Gelb, Rot` vor, im Code steht `green, blue, red` (`ReleaseLevel.cs:5-7`) – „Gelb" wurde zu „blue". Vermutlich ein Versehen beim Tippen.
-- `Steuereinheit` ist im Diagramm vorhanden, im Code nicht.✅
+- `Employeedata.GetEmployee` gibt `Employee?` statt `string` zurück.
+- Redundante `releaseLevels`-Liste in `SafeteycardData` entfernt.
+- `Terminal.CanAccess` löst `Open()`/`Deny()` nicht mehr selbst aus (Single Responsibility).
+- `CanAccess` gewährt nicht mehr pauschal für alle Stufen Zugriff.
+- Unbenutztes `using System.Runtime.InteropServices;` aus `Terminal.cs` entfernt.
+- Interface `ITerminal` eingeführt.
+- Steuereinheit als `ControlSection` angelegt.
+- Unidirektionale Beziehung Karte → Mitarbeiter (`Safetycard` kennt nur `ownerId`).
 
-### 2. Datenklassen
-- `Employee`: Felder passen (Id, Name, HiredDate, Birthday, IsOnVacation, IsOnBusinessTrip).✅
-- Fragwürdig: `Employee.isAvailable()` (`Employee.cs:27-32`):
-  ```csharp
-  if (employee.isOnVacation) return false;
-  if (employee.isOnBusinessTrip) return true;
-  return true;
-  ```
-  Die beiden letzten Zeilen sind äquivalent – der `isOnBusinessTrip`-Zweig hat aktuell keinen Effekt. Die Aufgabenstellung nennt „Urlaub/Dienstreise" aber explizit als zwei unterschiedliche Plausibilitätsfälle für Schritt 8 (Testfall „rote Karte, Dienstreise"). Hier sollte überlegt werden, ob Dienstreise wirklich identisch zu „verfügbar" behandelt werden soll oder nicht.
-- `Safetycard`: Felder entsprechen exakt der Vorgabe (Karten-ID, Besitzer-Id, letztes Nutzungsdatum, Freigabestufe). ✅
-- Namenskonvention: `isAvailable`, `releaseLevel` (Enum) sind lowerCamelCase statt der in C# üblichen PascalCase-Konvention (`IsAvailable`, `ReleaseLevel`). Kein funktionaler Fehler, aber inkonsistent zur restlichen Codebasis (z.B. `GetId`, `GetName` sind PascalCase).✅
+## Noch zu fixen
 
-### 3. Datenbankklassen
-- `SafeteycardData.HasCard` / `GetCard` sind vorhanden wie gefordert. ✅
-- **Bug in `Employeedata.GetEmployee`** (`Employee.data.cs:12-16`): Laut Diagramm soll die Methode `Mitarbeiter` zurückgeben (`GetEmployee(id: int): Mitarbeiter`), aktuell gibt sie nur `employee?.GetName()`, also einen `string`, zurück. ✅
-- Dadurch geht die Information verloren, ob der Mitarbeiter im Urlaub/auf Dienstreise ist – genau die Information, die später für `CanAccess` gebraucht wird.
-- **Bug in `SafeteycardData.CardReleaselevel`** (`Safecard.Data.cs:26-30`): 
-  ```csharp
-  int index = releaseLevels.IndexOf((releaseLevel)Id);
-  return releaseLevels[index];
-  ```
-  Hier wird die Karten-`Id` direkt in einen `releaseLevel`-Enum-Wert gecastet und dessen Position in der separaten `releaseLevels`-Liste gesucht. Das hat keinen Bezug zur tatsächlich gespeicherten Karte. Beispiel: Karte mit `Id = 5` würde als `(releaseLevel)5` interpretiert (out of range) und dann in der Liste gesucht – das Ergebnis ist zufällig/falsch. Richtig wäre `GetCard(Id)?.GetReleaseLevel()`.✅
-- Die separate `releaseLevels`-Liste in `SafeteycardData` ist redundant, weil jede `Safetycard` ihr Level selbst kennt (`GetReleaseLevel()`) – sie ist die Ursache des obigen Bugs und kann ersatzlos entfernt werden.
-- Zum Lebenszyklus-Gedanken aus der Vorgehensweise (Singleton vs. einmal erzeugte Instanz): kann noch nicht bewertet werden, da es noch kein `Main` gibt, das die Datenbanken instanziiert.✅
+### 🔴 Blocker (Projekt baut nicht / Logik falsch)
 
-### 4. Seed-Daten
-Fehlt komplett – keine Datei/Methode, die die geforderten mindestens 10 Mitarbeiter (davon 4 mit „rot": 1 Urlaub, 1 Dienstreise, 2 anwesend) und die zugehörigen Karten anlegt.
+1. **`Program.cs` / `Main` fehlt** – `Sicherheitsfreigabe.csproj` hat `<OutputType>Exe</OutputType>`, ohne Einstiegspunkt gibt es Fehler `CS5001`.
 
-### 5. Terminal
-- `Terminal.CanAccess` (`Terminal.cs:10-21`) ruft `Open()`/`Deny()` **selbst** auf. Die Vorgehensweise verlangt aber ausdrücklich, dass `CanAccess` reine Prüf-Logik ist, **ohne** den Türmechanismus selbst auszulösen (Single-Responsibility – das soll die Steuereinheit übernehmen).
-- Der `switch` gewährt für **alle drei** Stufen (`green`, `blue`/„gelb", `red`) Zugriff und öffnet immer – es gibt aktuell keinerlei echte Prüfung, ob die Kartenstufe zur Terminal-/Türstufe passt.
-- Das Diagramm sieht `CanAccess(karte, mitarbeiter): bool` vor – die aktuelle Signatur `CanAccess(int id, SafeteycardData safetycard)` bekommt gar keinen `Mitarbeiter` übergeben, kann also die geforderte Plausibilitätsprüfung (Urlaub/Dienstreise) gar nicht durchführen.
-- Unbenutztes `using System.Runtime.InteropServices;` in `Terminal.cs:1`.
+2. **`CardReleaselevel` gibt immer `none` zurück** (`Safecard.Data.cs:25-30`):
+   ```csharp
+   GetCard(Id)?.GetReleaseLevel();   // Ergebnis wird verworfen
+   return releaseLevel.none;         // immer none
+   ```
+   Folge: `Terminal.CanAccess` landet nie in einem `case`, gibt immer „There currently is no safety level to this card.“ aus und verweigert **jeden** Zugriff. Fix:
+   ```csharp
+   return GetCard(Id)?.GetReleaseLevel() ?? releaseLevel.none;
+   ```
 
-### 6. Steuereinheit
-Fehlt vollständig. Es gibt keine Klasse mit `Challenge(kartenId)`, die Karte nachschlägt → Mitarbeiter ermittelt → Terminal fragt → Tür öffnen/verweigern lässt → Nutzungsdatum aktualisiert.
+3. **`Employee` ist `abstract`, aber es gibt keine Unterklassen** (`Employee.cs:3`). Damit kann kein einziger Mitarbeiter erzeugt werden → Seed-Daten unmöglich. Entweder `abstract` entfernen oder konkrete Unterklassen anlegen (vermutlich über das neue `Sector`-Enum gedacht, z.B. `HrEmployee`, `LogisticEmployee` …). Wenn Vererbung nicht wirklich gebraucht wird: einfacher ein Feld `Sector` in `Employee`.
 
-### 7. Main/Programmablauf
-Es existiert keine `Program.cs` im Projekt. Da `Sicherheitsfreigabe.csproj` `<OutputType>Exe</OutputType>` setzt, aber kein Einstiegspunkt vorhanden ist, **lässt sich das Projekt aktuell nicht bauen**.
+4. **`ControlSection.Challange` tut nichts** (`ControlSection.cs:13-16`): Das Ergebnis von `GetCard(id)` wird verworfen. Laut Diagramm soll `Challenge(kartenId)` den gesamten Ablauf steuern:
+   1. Karte nachschlagen (`HasCard` / `GetCard`) – unbekannte Karte → `Deny()`
+   2. Besitzer über `ownerId` in `Employeedata` holen
+   3. `terminal.CanAccess(karte, mitarbeiter)` fragen
+   4. `Open()` bzw. `Deny()` auslösen
+   5. `lastUsed` der Karte aktualisieren
 
-### 8. Tests
-Noch nicht sinnvoll möglich, da der Kernablauf (Steuereinheit, Main) fehlt.
+   Aktuell ist das auf `Challange` (leer) und `Control` (nur Terminal) aufgeteilt – zu **einer** Methode `Challenge` zusammenführen.
 
-### 9. Protokollsystem
-Laut Aufgabe optional – bewusst noch nicht begonnen, kein Handlungsbedarf.
+### 🟠 Fehlende Teile für den Ablauf
 
-## Weitere Beobachtungen (Code-Qualität, keine Blocker)
-- Tippfehler/Inkonsistenz: Klasse heißt `SafeteycardData` (Datei `Safecard.Data.cs`), während die zugehörige Datenklasse korrekt `Safetycard` heißt.
-- Dateibenennung uneinheitlich: `Employee.data.cs` vs. `Safecard.Data.cs` (unterschiedliche Groß-/Kleinschreibung, unterschiedliches Namensschema).
+5. **`Safetycard` fehlen Zugriffsmethoden** (`Safetycard.cs`): Es gibt keinen Getter für `ownerId` (Steuereinheit kann den Besitzer nicht ermitteln) und keine Möglichkeit, `lastUsed` zu aktualisieren. Ergänzen z.B. `GetOwnerId()` und `UpdateLastUsed(DateTime)`.
 
-## Empfohlene nächste Schritte (Priorität)
+6. **`Terminal.CanAccess` bekommt keinen Mitarbeiter** (`ITerminal.cs:5`, `Terminal.cs:5`): Signatur ist `CanAccess(int id)`, das Diagramm verlangt `CanAccess(karte, mitarbeiter)`. Ohne Mitarbeiter ist die Plausibilitätsprüfung (Urlaub/Dienstreise) nicht möglich. Außerdem greift das Terminal dadurch selbst auf die Datenbank zu – das sollte die Steuereinheit erledigen und dem Terminal nur Karte + Mitarbeiter übergeben.
 
-1. `ReleaseLevel`-Enum ans Diagramm angleichen (`green, blue, red` → `Gruen/Grün, Gelb, Rot` oder konsistent Englisch) – Namenskonsistenz klären.
-2. `CardReleaselevel`-Bug fixen: über `GetCard(Id)?.GetReleaseLevel()` statt über den Cast-Trick.
-3. `Employeedata.GetEmployee` so ändern, dass es das `Employee`-Objekt zurückgibt (nicht nur den Namen).
-4. `CanAccess` neu bauen: Signatur mit Karte *und* Mitarbeiter, echte Prüfung Freigabestufe-passt-zu-Terminal UND Urlaub/Dienstreise-Plausibilität – **ohne** `Open()`/`Deny()` selbst aufzurufen.
-5. `Steuereinheit` mit `Challenge(kartenId)` als Orchestrator bauen.
-6. `Program.cs` schreiben: Instanzen/Seed-Daten erzeugen (10 Mitarbeiter, 4 rote Karten wie gefordert), Schleife über alle Karten, die jeweils `Challenge` auslösen.
-7. Testfälle aus der Vorgehensweise (Schritt 8) schriftlich festhalten und durchspielen.
-8. Optional danach: Protokollsystem ergänzen.
+7. **Terminal hat keine eigene Stufe**: Fest verdrahtet ist „nur `red` darf rein“. Für mehrere Türen/Bereiche sollte das Terminal eine benötigte Mindeststufe kennen (z.B. Konstruktor-Parameter) und `karte.GetReleaseLevel() >= benoetigteStufe` prüfen.
+
+8. **`Employee.isAvailable` – Dienstreise-Zweig ohne Effekt** (`Employee.cs:27-32`): `if (IsOnBusinessTrip) return true;` ist identisch mit dem folgenden `return true;`. Bewusst entscheiden: Wer auf Dienstreise ist, ist physisch nicht vor Ort → vermutlich `return false`. Relevant für Testfall „rote Karte, Dienstreise“. Außerdem: `static` mit Parameter ist unnötig – besser Instanzmethode `IsAvailable()` (wie im Diagramm `IstVerfuegbar()`).
+
+9. **Seed-Daten fehlen**: Mindestens 10 Mitarbeiter mit Karten, davon 4 mit Stufe „rot“ (1 Urlaub, 1 Dienstreise, 2 anwesend).
+
+### 🟡 Abweichungen vom Diagramm / Code-Qualität
+
+10. **Enum-Werte** (`ReleaseLevel.cs`): Diagramm `Gruen, Gelb, Rot`, Code `green, blue, red, none` – „Gelb“ ist immer noch `blue`. Auf `green, yellow, red` (oder deutsch) angleichen. `none` ist neu und nicht im Diagramm → entweder ins Diagramm aufnehmen oder stattdessen mit `releaseLevel?` arbeiten.
+11. **Enum-Name `releaseLevel`** ist lowerCamelCase → in C# üblich `ReleaseLevel`.
+12. **Unbenutzter Parameter** `release` in `SafeteycardData.Add(Safetycard card, releaseLevel release)` – das Level steckt schon in der Karte, Parameter entfernen.
+13. **`Employee.GetById` überflüssig** (`Employee.cs:41-45`): Das Dictionary in `Employeedata` liefert bereits den richtigen Mitarbeiter, `GetEmployee` kann direkt `employee` zurückgeben.
+14. **Unbenutzte `using`s**: `System.ComponentModel.Design` (`Safecard.Data.cs:1`), `System.Numerics` (`ControlSection.cs:1`).
+15. **Uneinheitlicher Lebenszyklus**: `SafeteycardData` ist `static`, `Employeedata` eine normale Klasse. Einheitlich entscheiden (z.B. beide als Instanzen in `Main` erzeugen und an `ControlSection` übergeben).
+16. **Benennung**: Klasse `SafeteycardData` (Tippfehler) in Datei `Safecard.Data.cs`; `Employeedata` in `Employee.data.cs`; Methode `Challange` statt `Challenge`; `GetSafetycard()` liefert eigentlich die Karten-ID → `GetCardId()`. Einheitlich z.B. `SafetycardData.cs` / `EmployeeData.cs`.
+17. **`Sector`-Enum** ist neu, wird aber nirgends verwendet; ist weder im Diagramm noch in der Vorgehensweise vorgesehen. Entweder einbauen (siehe Punkt 3) oder entfernen.
+18. **Diagramm aktualisieren**: Felder `HiredDate`/`Birthday`, `Sector`, `ITerminal` und `none` sind im Code, aber nicht im Klassendiagramm.
+
+## Empfohlene Reihenfolge
+
+1. `CardReleaselevel` fixen (Punkt 2).
+2. `abstract` bei `Employee` entfernen oder Unterklassen anlegen (Punkt 3).
+3. `Safetycard` um `GetOwnerId()` und `UpdateLastUsed()` ergänzen (Punkt 5).
+4. `CanAccess(Safetycard, Employee)` mit Stufen- und Verfügbarkeitsprüfung bauen (Punkte 6–8).
+5. `ControlSection.Challenge(kartenId)` als kompletten Ablauf implementieren (Punkt 4).
+6. `Program.cs` mit Seed-Daten und Schleife über alle Karten schreiben (Punkte 1, 9).
+7. Testfälle aus Schritt 8 durchspielen und schriftlich festhalten.
+8. Aufräumen (Punkte 10–18), optional Protokollsystem.
