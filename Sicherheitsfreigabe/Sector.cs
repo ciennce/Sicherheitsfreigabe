@@ -6,6 +6,6 @@
         marketing,
         logistic,
         kitchenPersonal,
-        
+        none
     }
 }

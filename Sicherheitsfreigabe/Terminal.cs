@@ -5,11 +5,11 @@
         public bool CanAccess(int id)
         {
 
-            switch (SafeteycardData.CardReleaselevel(id))
+            switch (SafeteycardData.GetCardReleaselevel(id))
             {
-                case releaseLevel.green: return false;
-                case releaseLevel.red: return true;
-                case releaseLevel.blue: return false;
+                case ReleaseLevel.green: return false;
+                case ReleaseLevel.red: return true;
+                case ReleaseLevel.blue: return false;
             }
             Console.WriteLine("There currently is no safety level to this card.");
             return false;

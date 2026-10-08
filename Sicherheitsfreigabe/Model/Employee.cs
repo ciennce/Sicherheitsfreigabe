@@ -1,6 +1,6 @@
-﻿namespace Sicherheitsfreigabe
+﻿namespace Sicherheitsfreigabe.Model
 {
-    abstract class Employee
+    class Employee
     {
         private int EmployeeId { get; set; }
 
@@ -12,9 +12,9 @@
 
         private bool IsOnVacation { get; set; }
 
-        private bool IsOnBusinessTrip { get; set; }
+        private bool IsOnBusinessTrip { get; set; 
 
-        public Employee(string pName, int pEmployeeId, bool pIsOnBusinessTrip, bool pIsOnVacation, DateTime pHiredDate, DateTime pBirthday)
+        public Employee(string pName, int pEmployeeId, bool pIsOnBusinessTrip, bool pIsOnVacation, DateTime pHiredDate, DateTime pBirthday,Sector pSector)
         {
             Name = pName;
             EmployeeId = pEmployeeId;

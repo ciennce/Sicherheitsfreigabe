@@ -1,6 +1,6 @@
 ﻿namespace Sicherheitsfreigabe
 {
-    enum releaseLevel
+    enum ReleaseLevel
     {
         green,
         blue,

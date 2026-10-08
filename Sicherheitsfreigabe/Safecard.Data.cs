@@ -1,12 +1,10 @@
-using System.Reflection.Metadata.Ecma335;
-
 namespace Sicherheitsfreigabe
 {
     static class SafeteycardData
     {
         private static readonly Dictionary<int, Safetycard> safetycards = [];
 
-        public static void Add(Safetycard card, releaseLevel release)
+        public static void Add(Safetycard card, ReleaseLevel release)
         {
             safetycards[card.GetSafetycard()] = card;
         }
@@ -22,9 +20,14 @@ namespace Sicherheitsfreigabe
             return card;
         }
 
-        public static releaseLevel CardReleaselevel(int Id)
+        public static ReleaseLevel GetCardReleaselevel(int Id)
         {
-            return SafeteycardData.GetCard(Id)?.GetReleaseLevel() ?? releaseLevel.none;
+            return SafeteycardData.GetCard(Id)?.GetReleaseLevel() ?? ReleaseLevel.none;
+        }
+
+        public static Sector GetCardSector(int Id)
+        {
+            return SafeteycardData.GetCard(Id)?.GetSector() ?? Sector.none;
         }
     }
 }

@@ -8,14 +8,24 @@
 
         private DateTime lastUsed { get; set; }
 
-        private releaseLevel releaseLevel { get; set; }
+        private ReleaseLevel releaseLevel { get; set; }
 
-        public Safetycard(int pCardId, releaseLevel pReleaseLevel, int pOwnerId, DateTime pLastUsed)
+        private Sector Sector { get; set; }
+
+        public Safetycard(int pCardId, int pOwnerId, DateTime pLastUsed, Sector sector  )
         {
             cardId = pCardId;
-            releaseLevel = pReleaseLevel;
             ownerId = pOwnerId;
             lastUsed = pLastUsed;
+            Sector = sector;
+        }
+
+        public void AddReleaseLevel() // Filter für releaseLevel; if sector == _ -> releaselevel._;
+        {
+            if (Sector == Sector.HR)
+            {
+                
+            }
         }
 
         public int GetSafetycard()
@@ -23,9 +33,14 @@
             return cardId;
         }
 
-        public releaseLevel GetReleaseLevel()
+        public ReleaseLevel GetReleaseLevel()
         {
             return releaseLevel;
+        }
+
+        public Sector GetSector()
+        {
+            return Sector;
         }
     }
 }
