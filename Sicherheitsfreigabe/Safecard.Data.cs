@@ -1,4 +1,4 @@
-using System.ComponentModel.Design;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Sicherheitsfreigabe
 {
@@ -24,9 +24,7 @@ namespace Sicherheitsfreigabe
 
         public static releaseLevel CardReleaselevel(int Id)
         {
-            GetCard(Id)?.GetReleaseLevel();
-            return releaseLevel.none;
-
+            return SafeteycardData.GetCard(Id)?.GetReleaseLevel() ?? releaseLevel.none;
         }
     }
 }

@@ -31,8 +31,6 @@
             return true;
         }
 
-
-
         public int GetId()
         {
             return EmployeeId;

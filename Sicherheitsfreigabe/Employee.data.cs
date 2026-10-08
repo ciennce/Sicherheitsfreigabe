@@ -1,6 +1,6 @@
 namespace Sicherheitsfreigabe
 {
-    class Employeedata
+    class EmployeeData
     {
         private readonly Dictionary<int, Employee> employees = [];
 
