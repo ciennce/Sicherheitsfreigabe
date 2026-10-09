@@ -22,10 +22,7 @@
 
         public void AddReleaseLevel() // Filter für releaseLevel; if sector == _ -> releaselevel._;
         {
-            if (Sector == Sector.HR)
-            {
-                
-            }
+            
         }
 
         public int GetSafetycard()

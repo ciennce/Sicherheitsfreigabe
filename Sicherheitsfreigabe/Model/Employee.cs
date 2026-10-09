@@ -14,7 +14,7 @@
 
         private bool IsOnBusinessTrip { get; set; }
 
-        public Employee(string pName, int pEmployeeId, bool pIsOnBusinessTrip, bool pIsOnVacation, DateTime pHiredDate, DateTime pBirthday,Sector pSector)
+        public Employee(string pName, int pEmployeeId, bool pIsOnBusinessTrip, bool pIsOnVacation, DateTime pHiredDate, DateTime pBirthday)
         {
             Name = pName;
             EmployeeId = pEmployeeId;

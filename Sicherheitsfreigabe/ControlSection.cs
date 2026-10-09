@@ -1,6 +1,4 @@
-﻿using System.Dynamic;
-
-namespace Sicherheitsfreigabe
+﻿namespace Sicherheitsfreigabe
 {
     class ControlSection
     {
@@ -12,11 +10,12 @@ namespace Sicherheitsfreigabe
 
         public void Challange(int id)
         {
-            SafeteycardData.GetCard(id);
+            Control(id);
         }
 
         public void Control(int id)
         {
+
             if (!terminal.CanAccess(id))
             {
                 terminal.Deny();
