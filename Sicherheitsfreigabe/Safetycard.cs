@@ -20,9 +20,9 @@
             Sector = sector;
         }
 
-        public void AddReleaseLevel() // Filter für releaseLevel; if sector == _ -> releaselevel._;
+        public void AddReleaseLevel(Employee) // Filter für releaseLevel; if sector == _ -> releaselevel._;
         {
-            
+             
         }
 
         public int GetSafetycard()
