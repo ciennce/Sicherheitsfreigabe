@@ -47,5 +47,16 @@
         {
             return Sector;
         }
+
+        public int GetOwnerId()
+        {
+            return ownerId;
+        }
+
+        public DateTime UpdateLastUsed(DateTime time)
+        {
+            time = lastUsed;
+            return time;
+        }
     }
 }

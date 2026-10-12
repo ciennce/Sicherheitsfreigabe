@@ -7,31 +7,27 @@ namespace Sicherheitsfreigabe
         private Terminal terminal;
 
         private EmployeeData employeeData;
-        public ControlSection()
+
+        public ControlSection(EmployeeData pEmployeeData)
         {
             terminal = new();
-            employeeData = new();
+            employeeData = pEmployeeData;
         }
 
-        public string Challange(int id, Safetycard card, Employee employee)
+        public string Challenge(int cardId)
         {
-            var input = Console.ReadKey().ToString();
+            var card = SafeteycardData.GetCard(cardId);
+            if (card == null) return terminal.Deny();               
 
-            input = input switch
-            {
-                "1" => SafeteycardData.GetCard(id)?.ToString(),
-                "2" => terminal.CanAccess(card, employee).ToString(),
-                "3" => terminal.Open(),
-                "4" => terminal.Deny(),
-                _ => throw new Exception("Wrong input.")
-            };
-            return input ?? string.Empty;
-           
+            var employee = employeeData.GetEmployee(card.GetOwnerId());
+            if (employee == null) return terminal.Deny();
+
+            card.UpdateLastUsed(DateTime.Now);
+            return terminal.CanAccess(card, employee) ? terminal.Open() : terminal.Deny();
         }
 
         public void Control(Safetycard card, Employee employee)
         {
-
             if (!terminal.CanAccess(card, employee))
             {
                 employeeData.GetEmployee(employee.GetId());
