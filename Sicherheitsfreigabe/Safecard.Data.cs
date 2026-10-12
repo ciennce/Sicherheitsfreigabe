@@ -4,7 +4,7 @@ namespace Sicherheitsfreigabe
     {
         private static readonly Dictionary<int, Safetycard> safetycards = [];
 
-        public static void Add(Safetycard card, ReleaseLevel release)
+        public static void Add(Safetycard card)
         {
             safetycards[card.GetSafetycard()] = card;
         }
