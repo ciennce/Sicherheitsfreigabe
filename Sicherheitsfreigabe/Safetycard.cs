@@ -53,10 +53,9 @@
             return ownerId;
         }
 
-        public DateTime UpdateLastUsed(DateTime time)
+        public void UpdateLastUsed(DateTime time)
         {
-            time = lastUsed;
-            return time;
+            lastUsed = time;
         }
     }
 }
