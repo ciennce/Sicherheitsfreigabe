@@ -18,11 +18,19 @@
             ownerId = pOwnerId;
             lastUsed = pLastUsed;
             Sector = sector;
+            AddReleaseLevel();
         }
 
-        public void AddReleaseLevel(Employee) // Filter für releaseLevel; if sector == _ -> releaselevel._;
+        private void AddReleaseLevel()
         {
-             
+            releaseLevel = Sector switch
+            {
+                Sector.HR => ReleaseLevel.red,
+                Sector.logistic => ReleaseLevel.blue,
+                Sector.marketing => ReleaseLevel.green,
+                Sector.kitchenPersonal => ReleaseLevel.green,
+                _ => ReleaseLevel.none
+            };
         }
 
         public int GetSafetycard()
