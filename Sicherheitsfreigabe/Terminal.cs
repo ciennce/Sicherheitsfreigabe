@@ -1,16 +1,11 @@
-﻿namespace Sicherheitsfreigabe
+﻿using Sicherheitsfreigabe.Model;
+
+namespace Sicherheitsfreigabe
 {
     class Terminal : ITerminal
     {
-        public bool CanAccess(int id)
-        {
-            bool result = SafeteycardData.GetCardReleaselevel(id) switch
-            {
-                ReleaseLevel.red => true,
-                _ => false
-            };
-            return result;
-        }
+        public bool CanAccess(Safetycard card, Employee employee)
+            => card.GetReleaseLevel() == ReleaseLevel.red && employee.IsAvailable();
 
         public string Deny()
         {
