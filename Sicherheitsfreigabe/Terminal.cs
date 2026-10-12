@@ -12,14 +12,14 @@
             return result;
         }
 
-        public void Deny()
+        public string Deny()
         {
-            Console.WriteLine("Access denied");
+            return "Access denied";
         }
 
-        public void Open()
+        public string Open()
         {
-            Console.WriteLine("Access granted");
+            return "Access granted";
         }
     }
 }

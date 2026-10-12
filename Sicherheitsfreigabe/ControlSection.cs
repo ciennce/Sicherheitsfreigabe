@@ -8,9 +8,20 @@
             terminal = new();
         }
 
-        public void Challange(int id)
+        public string Challange(int id)
         {
-            Control(id);
+            var input = Console.ReadKey().ToString();
+
+            input = input switch
+            {
+                "1" => SafeteycardData.GetCard(id)?.ToString(),
+                "2" => terminal.CanAccess(id).ToString(),
+                "3" => terminal.Open(),
+                "4" => terminal.Deny(),
+                _ => throw new Exception("Wrong input.")
+            };
+            return input ?? string.Empty;
+           
         }
 
         public void Control(int id)
