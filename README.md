@@ -5,24 +5,24 @@
 [![Top contributors](https://images.repography.com/159967951/ciennce/Sicherheitsfreigabe/recent-activity/TSNXUjia3BXS8LN7uyAiHNQySTopZ9CZiAcRgM9_FWA/yUM1eJXmkgO7vzdMwOdXWtgQkaeoJCh1u342uxA_JJ4_users.svg)](https://github.com/ciennce/Sicherheitsfreigabe/graphs/contributors)
 # Fortschrittsbewertung – Sicherheitsfreigabe
 
-Stand: 2026-10-12 (nach Commit `2e81891` „fixed more“). Abgleich von Code, Klassendiagramm (`Infos/Sicherheitsfreigabe-Klassendiagramm.drawio`) und Vorgehensweise.
+Stand: 2026-10-12 (nach Commit `f9969c1` „added func, LastUsed, Added func, GetOwnderId | fixed challanges logic.“). Abgleich von Code, Klassendiagramm (`Infos/Sicherheitsfreigabe-Klassendiagramm.drawio`) und Vorgehensweise.
 
 ## Kurzfazit
 
-Die Prüflogik ist jetzt richtig: `Terminal.CanAccess(card, employee)` prüft **Kartenstufe und Verfügbarkeit** des Mitarbeiters – genau wie im Diagramm. Eine rote Karte im Urlaub oder auf Dienstreise wird damit abgelehnt. **Was noch fehlt, ist der Ablauf drumherum:** `Main` ruft die Steuereinheit nicht auf, das Menü in `Challange` stürzt bei jeder Eingabe ab (`ReadKey().ToString()`), und `ControlSection` erzeugt sich eine **eigene, leere** `EmployeeData` statt die aus `Main` zu benutzen.
+Großer Schritt: Die **Steuereinheit ist jetzt fertig wie im Diagramm**. `Challenge(cardId)` sucht die Karte, holt den Besitzer, fragt das Terminal und gibt „Access granted/denied“ zurück. `ControlSection` bekommt die Mitarbeiter-Datenbank aus `Main`, und das abstürzende Menü ist weg. **Was noch fehlt:** `Main` ruft `Challenge` noch nicht auf (das Programm gibt also nichts aus), es gibt erst 1 von mindestens 10 Mitarbeitern, und `UpdateLastUsed` ist vertauscht – `lastUsed` wird nie aktualisiert.
 
 ## Abgleich mit der 10-Schritte-Vorgehensweise
 
 | # | Schritt | Status |
 |---|---------|--------|
 | 1 | Modell entwerfen | ✅ Stufe wird aus `Sector` abgeleitet |
-| 2 | Datenklassen (Mitarbeiter, Sicherheitskarte) | ⚠️ `Safetycard` fehlen `GetOwnerId()` / `UpdateLastUsed()` |
+| 2 | Datenklassen (Mitarbeiter, Sicherheitskarte) | ⚠️ `UpdateLastUsed` setzt den Wert nicht |
 | 3 | Datenbankklassen | ✅ funktionsfähig |
 | 4 | Seed-Daten | ⚠️ angefangen (1 Mitarbeiter, 1 Karte von mind. 10) |
 | 5 | Terminal | ✅ `CanAccess(karte, mitarbeiter)` wie im Diagramm |
-| 6 | Steuereinheit | ⚠️ eigene leere `EmployeeData`, Menü-Eingabe kaputt, Ablauf laut Diagramm fehlt |
-| 7 | Main/Programmablauf | ⚠️ Daten werden angelegt, aber `ControlSection` nie benutzt |
-| 8 | Tests | ⚠️ erste Testoptionen, noch nicht lauffähig |
+| 6 | Steuereinheit | ✅ `Challenge(cardId)` mit komplettem Ablauf |
+| 7 | Main/Programmablauf | ⚠️ `ControlSection` wird erzeugt, `Challenge` aber nie aufgerufen |
+| 8 | Tests | ❌ noch nicht durchführbar (keine Ausgabe, zu wenig Daten) |
 | 9 | Protokollsystem (optional) | ❌ offen (ok, optional) |
 | 10 | Abgabe | – |
 
@@ -30,16 +30,17 @@ Die Prüflogik ist jetzt richtig: `Terminal.CanAccess(card, employee)` prüft **
 
 Seit dem letzten Stand:
 
-- **`CanAccess(Safetycard card, Employee employee)`** in `ITerminal` und `Terminal` – Signatur wie im Diagramm.
-- **Echte Prüfung**: `card.GetReleaseLevel() == ReleaseLevel.red && employee.IsAvailable()` – Kartenstufe **und** Urlaub/Dienstreise werden geprüft. Damit sind die Testfälle „rote Karte, Urlaub“ und „rote Karte, Dienstreise“ logisch abgedeckt.
-- **Terminal holt sich nichts mehr selbst aus der Datenbank** – es bekommt Karte und Mitarbeiter übergeben (Single Responsibility).
-- **Zwischenvariable `result` entfernt**, `CanAccess` ist jetzt ein Einzeiler.
-- **`ControlSection` hat ein Feld für `EmployeeData`** – erster Schritt, damit die Steuereinheit Mitarbeiter nachschlagen kann.
+- **`Challenge(int cardId)` als kompletter Ablauf** (`ControlSection.cs:17-27`): Karte nachschlagen → unbekannt = `Deny()`, Besitzer über `GetOwnerId()` holen → unbekannt = `Deny()`, `lastUsed` aktualisieren, `CanAccess` fragen → `Open()` oder `Deny()`. Genau so steht es im Diagramm.
+- **Gemeinsame Mitarbeiter-Datenbank**: `ControlSection(EmployeeData pEmployeeData)` bekommt die Datenbank aus `Main`, statt sich eine eigene leere zu erzeugen.
+- **`Safetycard.GetOwnerId()`** ergänzt – die Steuereinheit kann den Besitzer jetzt selbst finden.
+- **Test-Menü mit `ReadKey().ToString()` und `throw` entfernt** – der Absturz bei jeder Eingabe ist damit weg, und man kann die Tür nicht mehr ohne Prüfung öffnen.
+- **Name korrigiert**: `Challange` → `Challenge`.
+- **`Main` erzeugt eine `ControlSection`** und übergibt `employees`.
 
 Davor schon erledigt:
 
-- Erste Seed-Daten in `Main` (Mitarbeiterin „Anna“, `HR`-Karte 100).
-- `SafeteycardData.Add` ohne unnötigen `ReleaseLevel`-Parameter; `Open()`/`Deny()` geben `string` zurück.
+- `Terminal.CanAccess(card, employee)` prüft Kartenstufe **und** `IsAvailable()`; Terminal holt sich nichts mehr selbst aus der Datenbank.
+- Erste Seed-Daten in `Main`; `SafeteycardData.Add` ohne unnötigen Parameter; `Open()`/`Deny()` geben `string` zurück.
 - Freigabestufe wird per `switch` aus dem `Sector` abgeleitet, im Konstruktor an der richtigen Stelle aufgerufen.
 - `IsAvailable()` korrekt: `!IsOnVacation && !IsOnBusinessTrip`.
 - `Sector` nur noch an der Karte; `Program.cs` mit `Main`; Syntaxfehler behoben; `ExpandoObject`/`dynamic` entfernt.
@@ -49,103 +50,85 @@ Davor schon erledigt:
 
 ## Noch zu fixen
 
-### 🔴 Wichtig (Programm stürzt ab / tut nichts)
+### 🔴 Wichtig
 
-1. **`Console.ReadKey().ToString()` liefert nicht die Taste** (`ControlSection.cs:18`): `ReadKey()` gibt ein `ConsoleKeyInfo` zurück, dessen `ToString()` nur `"System.ConsoleKeyInfo"` ergibt. Keiner der Fälle `"1"`–`"4"` passt → **jede Eingabe wirft `Exception("Wrong input.")`**. Fix:
+1. **`UpdateLastUsed` ist vertauscht** (`Safetycard.cs:56-60`):
    ```csharp
-   var input = Console.ReadKey().KeyChar.ToString();
+   time = lastUsed;   // ❌ überschreibt den Parameter mit dem ALTEN Wert
+   return time;       //    lastUsed selbst ändert sich nie
    ```
-
-2. **`ControlSection` benutzt eine eigene, leere Mitarbeiter-Datenbank** (`ControlSection.cs:13`): `employeeData = new();` erzeugt eine **neue** `EmployeeData`, in der niemand drin ist. Die Mitarbeiter aus `Main` landen in einer **anderen** Instanz. `GetEmployee` würde hier also immer `null` liefern. Lösung: die Datenbank aus `Main` übergeben:
+   Richtig herum:
    ```csharp
-   public ControlSection(EmployeeData pEmployeeData)
+   public void UpdateLastUsed(DateTime pTime)
    {
-       terminal = new();
-       employeeData = pEmployeeData;
+       lastUsed = pTime;
    }
    ```
+   Der Rückgabewert wird in `Challenge` ohnehin nicht benutzt, `void` reicht.
+
+2. **`Main` ruft `Challenge` nie auf** (`Program.cs:7-17`): `control` wird erzeugt, aber nicht benutzt – das Programm endet ohne Ausgabe. Am Ende von `Main` ergänzen, z.B.:
    ```csharp
-   // in Main
-   var control = new ControlSection(employees);
-   ```
-
-3. **`Main` benutzt die Steuereinheit nicht** (`Program.cs:7-17`): Es wird keine `ControlSection` erzeugt und nichts aufgerufen – das Programm endet sofort ohne Ausgabe.
-
-4. **`Control()` gibt nichts aus** (`ControlSection.cs:32-42`): `terminal.Open()`/`Deny()` geben einen `string` zurück, der hier verworfen wird. Entweder `Console.WriteLine(terminal.Open());` oder `Control` gibt den Text zurück. Außerdem ist `employeeData.GetEmployee(employee.GetId());` in Zeile 37 wirkungslos – das Ergebnis wird nicht benutzt, und den Mitarbeiter hat man an der Stelle ja schon.
-
-### 🟠 Aufbau / fehlende Teile
-
-5. **`Challenge` soll nur die Karten-Id bekommen** (`ControlSection.cs:16`): Aktuell `Challange(int id, Safetycard card, Employee employee)` – der Aufrufer muss Karte und Mitarbeiter also schon selbst herausgesucht haben. Genau das ist aber die Aufgabe der Steuereinheit. Laut Diagramm `Challenge(kartenId)`:
-   ```csharp
-   public string Challenge(int cardId)
+   foreach (int cardId in new[] { 100, 101, 102 /* ... */ })
    {
-       var card = SafeteycardData.GetCard(cardId);
-       if (card == null) return terminal.Deny();               // unbekannte Karte
-
-       var employee = employeeData.GetEmployee(card.GetOwnerId());
-       if (employee == null) return terminal.Deny();           // Besitzer unbekannt
-
-       card.UpdateLastUsed(DateTime.Now);
-       return terminal.CanAccess(card, employee) ? terminal.Open() : terminal.Deny();
+       Console.WriteLine($"Karte {cardId}: {control.Challenge(cardId)}");
    }
    ```
-   Dafür braucht `Safetycard` noch `GetOwnerId()` und `UpdateLastUsed()` (Punkt 7). Das **Menü** (welche Karte testen?) gehört dann nach `Main`. Im aktuellen Menü kann man mit „3“ die Tür öffnen, **ohne** dass irgendetwas geprüft wird.
+   Für den Test „unbekannte Karte“ einfach eine Id mitgeben, die es nicht gibt (z.B. `999`).
 
-6. **`throw` bei falscher Eingabe** (`ControlSection.cs:26`): Ein Tippfehler beendet das ganze Programm. Für ein Menü besser eine Meldung (`_ => "Ungültige Eingabe"`) und nochmal fragen.
+3. **Seed-Daten unvollständig**: Mindestens 10 Mitarbeiter mit Karten, davon 4 mit `Sector.HR` (= rot):
+   - 1× HR **im Urlaub** → erwartet: denied
+   - 1× HR **auf Dienstreise** → erwartet: denied
+   - 2× HR **anwesend** → erwartet: granted
+   - 6× andere Bereiche → erwartet: denied (Terminal lässt nur `red` rein)
 
-7. **`Safetycard` fehlen Zugriffsmethoden**: Kein Getter für `ownerId` – deshalb kann die Steuereinheit den Besitzer nicht selbst finden. Außerdem keine Möglichkeit, `lastUsed` zu aktualisieren. Ergänzen:
-   ```csharp
-   public int GetOwnerId() => ownerId;
-   public void UpdateLastUsed(DateTime pTime) => lastUsed = pTime;
-   ```
+   Kleinigkeit: In `Main` gibt es schon `now`, trotzdem wird bei der Karte nochmal `DateTime.Now` verwendet.
 
-8. **`GetCard(id)?.ToString()` zeigt nur den Klassennamen** (`ControlSection.cs:22`): Ohne eigene `ToString()` kommt `"Sicherheitsfreigabe.Safetycard"` heraus. In `Safetycard` ergänzen:
+### 🟠 Aufräumen im Ablauf
+
+4. **`Control()` ist überflüssig** (`ControlSection.cs:29-38`): `Challenge` macht jetzt alles. `Control` wird nirgends aufgerufen, verwirft die Texte von `Open()`/`Deny()` und Zeile 33 (`employeeData.GetEmployee(...)`) bewirkt nichts → **löschen**.
+
+5. **`ToString()` für `Safetycard`** (optional, praktisch für die Test-Ausgabe):
    ```csharp
    public override string ToString()
-       => $"Karte {cardId}, Besitzer {ownerId}, Stufe {releaseLevel}, Bereich {Sector}";
+       => $"Karte {cardId}, Besitzer {ownerId}, Stufe {releaseLevel}, Bereich {Sector}, zuletzt {lastUsed}";
    ```
-
-9. **Seed-Daten unvollständig**: Mindestens 10 Mitarbeiter mit Karten, davon 4 mit `Sector.HR` (= rot): 1 Urlaub, 1 Dienstreise, 2 anwesend. Kleinigkeit: In `Main` gibt es schon `now`, trotzdem wird bei der Karte nochmal `DateTime.Now` verwendet.
+   Dann sieht man nach `Challenge` auch, ob `lastUsed` wirklich aktualisiert wurde (Punkt 1).
 
 ### 🟡 Abweichungen vom Diagramm / Code-Qualität
 
-10. **Enum-Werte** (`ReleaseLevel.cs`): Diagramm `Gruen, Gelb, Rot`, Code `green, blue, red, none` – „Gelb“ ist immer noch `blue`.
-11. **Terminal fest auf `red`**: Für mehrere Türen könnte das Terminal eine Mindeststufe im Konstruktor bekommen. Optional – für die Aufgabe reicht ein rotes Terminal.
-12. **`Employee.GetById` überflüssig**: Das Dictionary liefert schon den richtigen Mitarbeiter, `GetEmployee` kann direkt `employee` zurückgeben.
-13. **Uneinheitlicher Lebenszyklus**: `SafeteycardData` ist `static`, `EmployeeData` eine normale Klasse. Einheitlich entscheiden.
-14. **Benennung**: `SafeteycardData` (Tippfehler) in `Safecard.Data.cs`; `EmployeeData` in `Employee.data.cs`; `Challange` statt `Challenge`; `GetSafetycard()` liefert die Karten-ID → `GetCardId()`; Konstruktor-Parameter `sector` statt `pSector`. Innerhalb von `SafeteycardData` reicht `GetCard(Id)` statt `SafeteycardData.GetCard(Id)`.
-15. **Diagramm aktualisieren**: `HiredDate`/`Birthday`, `Sector` (an der Karte), `ITerminal`, `none`, die Ableitung Sector → Freigabestufe und die `string`-Rückgabe von `Open()`/`Deny()` sind im Code, aber nicht im Klassendiagramm.
+6. **Enum-Werte** (`ReleaseLevel.cs`): Diagramm `Gruen, Gelb, Rot`, Code `green, blue, red, none` – „Gelb“ ist immer noch `blue`.
+7. **Terminal fest auf `red`**: Für mehrere Türen könnte das Terminal eine Mindeststufe im Konstruktor bekommen. Optional – für die Aufgabe reicht ein rotes Terminal.
+8. **`Employee.GetById` überflüssig**: Das Dictionary liefert schon den richtigen Mitarbeiter, `GetEmployee` kann direkt `employee` zurückgeben.
+9. **Uneinheitlicher Lebenszyklus**: `SafeteycardData` ist `static`, `EmployeeData` eine Instanz. Funktioniert, aber einheitlich wäre leichter zu verstehen.
+10. **Benennung**: `SafeteycardData` (Tippfehler) in `Safecard.Data.cs`; `EmployeeData` in `Employee.data.cs`; `GetSafetycard()` liefert die Karten-ID → `GetCardId()`; Parameter `sector`/`time` statt `pSector`/`pTime` (sonst überall `p…`). Innerhalb von `SafeteycardData` reicht `GetCard(Id)` statt `SafeteycardData.GetCard(Id)`.
+11. **Diagramm aktualisieren**: `HiredDate`/`Birthday`, `Sector` (an der Karte), `ITerminal`, `none`, die Ableitung Sector → Freigabestufe, `GetOwnerId()`/`UpdateLastUsed()` und die `string`-Rückgabe von `Open()`/`Deny()` sind im Code, aber nicht im Klassendiagramm.
 
 ## Zum Verstehen 💡
 
-- **`new` erzeugt immer ein neues, eigenes Objekt**: `new EmployeeData()` in `Main` und `new EmployeeData()` in `ControlSection` sind **zwei verschiedene** Datenbanken. Was man in die eine hineinlegt, ist in der anderen nicht drin. Wenn mehrere Klassen dieselben Daten sehen sollen, erzeugt man das Objekt **einmal** (in `Main`) und gibt es weiter, z.B. über den Konstruktor. Bei `SafeteycardData` fällt das Problem nicht auf, weil die Klasse `static` ist – davon gibt es automatisch nur eine.
+- **Zuweisung geht von rechts nach links**: `a = b;` heißt „`a` bekommt den Wert von `b`“. In `UpdateLastUsed` steht `time = lastUsed;` – damit bekommt der **Parameter** den alten Wert, das **Feld** bleibt unverändert. Es muss `lastUsed = time;` heißen.
 
-- **`Console.ReadKey()` vs. `Console.ReadLine()`**:
-  - `ReadKey()` wartet auf **eine** Taste und gibt ein `ConsoleKeyInfo` zurück. Das Zeichen steckt in `.KeyChar` (z.B. `'1'`).
-  - `ReadLine()` wartet auf Enter und gibt den eingegebenen Text als `string` zurück – praktisch für Karten-Ids wie `100`.
+- **Referenzen – warum `ControlSection` die Mitarbeiter sieht**: In `Main` wird `control` **vor** `employees.Add(...)` erzeugt. Trotzdem findet `Challenge` Anna später, weil `ControlSection` keine Kopie bekommt, sondern einen **Verweis auf dasselbe Objekt**. Alles, was danach in `employees` hineinkommt, sieht auch `ControlSection`. (Anders als zweimal `new EmployeeData()` – das wären zwei getrennte Datenbanken.)
 
-- **`ToString()`**: Ohne eigenes `public override string ToString()` kommt nur der Klassenname heraus – deshalb `"System.ConsoleKeyInfo"` bzw. `"Sicherheitsfreigabe.Safetycard"`.
+- **Früh abbrechen („Guard Clauses“)** in `Challenge`: `if (card == null) return terminal.Deny();` beendet die Methode sofort, wenn etwas fehlt. So muss der restliche Code nicht in verschachtelte `if`s, und danach weiß man sicher: `card` ist nicht `null`.
 
-- **Rückgabewert vs. Ausgabe**: Eine Methode, die einen `string` zurückgibt, schreibt **nichts** auf die Konsole. Erst `Console.WriteLine(...)` zeigt ihn an. Wird der Rückgabewert nicht benutzt (`terminal.Open();`), passiert sichtbar nichts.
+- **Bedingungsoperator `? :`**: `bedingung ? a : b` heißt „wenn `bedingung` wahr ist, nimm `a`, sonst `b`“. In `Challenge`: Zugriff erlaubt → `Open()`, sonst `Deny()`.
 
 - **Karte vs. Mitarbeiter** (in `CanAccess`): Die **Karte** sagt, *wohin* jemand darf (Stufe). Der **Mitarbeiter** sagt, *ob er gerade da sein kann* (Urlaub/Dienstreise). `&&` heißt: Zugang nur, wenn **beides** stimmt.
 
-- **Freigabestufe aus dem Sector**: Der `switch` in `AddReleaseLevel()` liefert zu jedem `Sector` die passende Stufe, `_` fängt den Rest ab. Der Aufruf muss **nach** `Sector = sector;` im Konstruktor stehen.
+- **Rückgabewert vs. Ausgabe**: `Challenge` gibt einen `string` zurück, schreibt aber **nichts** auf die Konsole. Erst `Console.WriteLine(control.Challenge(100))` zeigt das Ergebnis an.
 
-- **Wer macht was (Single Responsibility)**:
-  - `SafeteycardData` / `EmployeeData` → speichern und finden
+- **Wer macht was (Single Responsibility)** – jetzt fast vollständig umgesetzt:
+  - `SafeteycardData` / `EmployeeData` → speichern und finden ✅
   - `Terminal.CanAccess(karte, mitarbeiter)` → **nur prüfen** ✅
-  - `Terminal.Open()` / `Deny()` → Tür (Text)
-  - `ControlSection.Challenge(kartenId)` → **sucht** Karte und Mitarbeiter, fragt das Terminal, aktualisiert `lastUsed`
-  - `Program.Main` → legt Daten an, ggf. Menü, ruft für jede Karte `Challenge` auf und gibt das Ergebnis aus
+  - `Terminal.Open()` / `Deny()` → Tür (Text) ✅
+  - `ControlSection.Challenge(kartenId)` → **steuert** den Ablauf ✅
+  - `Program.Main` → legt Daten an, ruft für jede Karte `Challenge` auf und gibt das Ergebnis aus ⚠️
 
 ## Empfohlene Reihenfolge
 
-1. `ReadKey().KeyChar` fixen, damit das Menü nicht mehr abstürzt (Punkt 1).
-2. `EmployeeData` aus `Main` per Konstruktor an `ControlSection` übergeben (Punkt 2).
-3. `Safetycard` um `GetOwnerId()`, `UpdateLastUsed()` und `ToString()` ergänzen (Punkte 7, 8).
-4. `Challenge(int cardId)` als kompletten Ablauf bauen, Menü nach `Main` (Punkte 4, 5, 6).
-5. In `Main` `ControlSection` erzeugen, `Challenge` aufrufen und Ergebnis ausgeben (Punkt 3).
-6. Seed-Daten auf 10 Mitarbeiter (4× `HR`) erweitern (Punkt 9).
-7. Testfälle aus Schritt 8 durchspielen und schriftlich festhalten.
-8. Aufräumen (Punkte 10–15), optional Protokollsystem.
+1. `UpdateLastUsed` umdrehen: `lastUsed = pTime;` (Punkt 1).
+2. In `Main` eine Schleife über die Karten-Ids mit `Console.WriteLine(control.Challenge(id))` (Punkt 2).
+3. Seed-Daten auf 10 Mitarbeiter + Karten erweitern, 4× `HR` mit Urlaub/Dienstreise/2× anwesend (Punkt 3).
+4. `Control()` löschen, optional `ToString()` ergänzen (Punkte 4, 5).
+5. Testfälle aus Schritt 8 durchspielen: erwartetes vs. tatsächliches Ergebnis pro Karte schriftlich festhalten.
+6. Aufräumen (Punkte 6–11), optional Protokollsystem.
