@@ -5,11 +5,11 @@
 [![Top contributors](https://images.repography.com/159967951/ciennce/Sicherheitsfreigabe/recent-activity/TSNXUjia3BXS8LN7uyAiHNQySTopZ9CZiAcRgM9_FWA/yUM1eJXmkgO7vzdMwOdXWtgQkaeoJCh1u342uxA_JJ4_users.svg)](https://github.com/ciennce/Sicherheitsfreigabe/graphs/contributors)
 # Fortschrittsbewertung – Sicherheitsfreigabe
 
-Stand: 2026-10-15 (nach Commit `8a6ed0e`, „added test“). Abgleich von Code, Klassendiagramm (`Infos/Sicherheitsfreigabe-Klassendiagramm.drawio`) und Vorgehensweise.
+Stand: 2026-10-15 (nach Commit `9aa9344`, „added“). Abgleich von Code, Klassendiagramm (`Infos/Sicherheitsfreigabe-Klassendiagramm.drawio`) und Vorgehensweise.
 
 ## Kurzfazit
 
-Der Ablauf ist jetzt komplett verdrahtet: `Main` → `ControlSection.Challenge(cardId)` → `Terminal.CanAccess(karte, mitarbeiter)` → Ausgabe auf der Konsole. `UpdateLastUsed` ist korrigiert. **Aber:** Die Test-Schleife fragt die Karten-Ids `1`–`8` ab, angelegt ist aber nur Karte `100`. Deshalb gibt das Programm **8× „Access denied“** aus, und die einzige echte Karte (Anna, `HR`) wird gar nicht getestet. Außerdem gibt es erst 1 von mindestens 10 Mitarbeitern.
+Der Ablauf ist jetzt komplett verdrahtet: `Main` → `ControlSection.Challenge(cardId)` → `Terminal.CanAccess(karte, mitarbeiter)` → Ausgabe auf der Konsole. `UpdateLastUsed` ist korrigiert, und es gibt jetzt 3 Mitarbeiter mit Karten (`100`–`102`). **Aber:** Die Test-Schleife fragt weiterhin die Karten-Ids `1`–`8` ab – keine davon existiert. Das Programm gibt deshalb **8× „Access denied“** aus, und die drei angelegten Karten werden gar nicht getestet. Außerdem fehlen noch 7 Mitarbeiter, und Yunus (Dienstreise) hat eine `logistic`-Karte – damit wird der Testfall „rote Karte + Dienstreise“ nicht abgedeckt.
 
 ## Abgleich mit der 10-Schritte-Vorgehensweise
 
@@ -18,7 +18,7 @@ Der Ablauf ist jetzt komplett verdrahtet: `Main` → `ControlSection.Challenge(c
 | 1 | Modell entwerfen | ✅ Stufe wird aus `Sector` abgeleitet |
 | 2 | Datenklassen (Mitarbeiter, Sicherheitskarte) | ✅ inkl. `GetOwnerId()` und `UpdateLastUsed()` |
 | 3 | Datenbankklassen | ✅ funktionsfähig |
-| 4 | Seed-Daten | ⚠️ angefangen (1 Mitarbeiter, 1 Karte von mind. 10) |
+| 4 | Seed-Daten | ⚠️ 3 von mind. 10 Mitarbeitern/Karten |
 | 5 | Terminal | ✅ `CanAccess(karte, mitarbeiter)` wie im Diagramm |
 | 6 | Steuereinheit | ✅ `Challenge(cardId)` mit komplettem Ablauf |
 | 7 | Main/Programmablauf | ⚠️ Schleife vorhanden, fragt aber falsche Karten-Ids ab |
@@ -30,6 +30,8 @@ Der Ablauf ist jetzt komplett verdrahtet: `Main` → `ControlSection.Challenge(c
 
 Seit dem letzten Stand:
 
+- **Mehr Seed-Daten** (`Program.cs:15-22`): Max (`marketing`, Karte 101) und Yunus (`logistic`, auf Dienstreise, Karte 102) dazu – jetzt 3 Mitarbeiter mit Karten.
+- **Test-Kommentare entfernt** bei `now`/`today`.
 - **`UpdateLastUsed` korrigiert** (`Safetycard.cs:56-59`): jetzt `lastUsed = time;` und `void` – das Feld wird wirklich aktualisiert.
 - **Testlauf in `Main`** (`Program.cs:18-21`): Schleife über Karten-Ids, Ergebnis von `Challenge` wird mit `Console.WriteLine` ausgegeben. Das Programm zeigt jetzt zum ersten Mal etwas an.
 
@@ -50,16 +52,20 @@ Davor schon erledigt:
 
 ### 🔴 Wichtig
 
-1. **Schleife fragt Karten ab, die es nicht gibt** (`Program.cs:18`): `new[] { 1, 2, 3, 4, 5, 6, 7, 8 }` sind die Karten-Ids, die getestet werden. Angelegt ist aber nur Karte **`100`** (die `1` ist Annas **Mitarbeiter**-Id). Ergebnis:
+1. **Schleife fragt Karten ab, die es nicht gibt** (`Program.cs:25`): `new[] { 1, 2, 3, 4, 5, 6, 7, 8 }` sind die Karten-Ids, die getestet werden. Angelegt sind aber die Karten **`100`, `101`, `102`** (`1`, `2`, `3` sind die **Mitarbeiter**-Ids). Ergebnis:
    ```
    Karte 1: Access denied
    Karte 2: Access denied
    ...
    Karte 8: Access denied
    ```
-   Alle werden nur abgelehnt, weil `GetCard` `null` liefert – nicht wegen Stufe oder Urlaub. Die Schleife muss genau die Karten-Ids enthalten, die man vorher mit `SafeteycardData.Add(...)` angelegt hat (plus gern eine unbekannte wie `999` als eigenen Testfall).
+   Alle werden nur abgelehnt, weil `GetCard` `null` liefert – nicht wegen Stufe oder Urlaub. Die Schleife muss genau die Karten-Ids enthalten, die man vorher mit `SafeteycardData.Add(...)` angelegt hat (plus gern eine unbekannte wie `999` als eigenen Testfall):
+   ```csharp
+   foreach (int cardId in new[] { 100, 101, 102, /* ... */ 999 })
+   ```
+   Mit den aktuellen 3 Karten käme dann heraus: `100` (Anna, HR) → granted, `101` (Max, marketing) → denied, `102` (Yunus, logistic) → denied.
 
-2. **Seed-Daten unvollständig**: Mindestens 10 Mitarbeiter mit je einer Karte. Vorschlag mit erwartetem Ergebnis – das ist gleichzeitig die Testtabelle für Schritt 8:
+2. **Seed-Daten unvollständig**: 3 von mindestens 10 Mitarbeitern mit je einer Karte. Außerdem: **Yunus (Dienstreise) hat eine `logistic`-Karte (blue)** – die wird ohnehin abgelehnt, egal ob Dienstreise oder nicht. Um zu testen, dass die Dienstreise-Prüfung funktioniert, muss die Person auf Dienstreise eine **`HR`-Karte** (rot) haben. Gleiches gilt für den Urlaubs-Fall. Vorschlag mit erwartetem Ergebnis – das ist gleichzeitig die Testtabelle für Schritt 8:
 
    | Karte | Besitzer | Bereich | Urlaub | Dienstreise | Erwartet |
    |-------|----------|---------|--------|-------------|----------|
@@ -84,7 +90,7 @@ Davor schon erledigt:
    ```
    Damit kann man nach dem Testlauf z.B. prüfen, ob `lastUsed` wirklich aktualisiert wurde.
 
-5. **Kleinigkeiten in `Main`**: Die Kommentare `//test` / `//Test` bei `now`/`today` entfernen oder erklären. `now` existiert schon, bei der Karte wird trotzdem nochmal `DateTime.Now` verwendet. `today` als Geburtstag ist als Testwert ok, für die Abgabe besser ein echtes Datum (z.B. `new DateTime(1990, 5, 12)`).
+5. **Kleinigkeiten in `Main`**: `now` existiert schon, bei der Karte wird trotzdem nochmal `DateTime.Now` verwendet. `today` als Geburtstag ist als Testwert ok, für die Abgabe besser ein echtes Datum (z.B. `new DateTime(1990, 5, 12)`).
 
 ### 🟡 Abweichungen vom Diagramm / Code-Qualität
 
