@@ -14,6 +14,11 @@ namespace Sicherheitsfreigabe
 
             employees.Add(new Employee("Anna", 1, false, false, now, today));
             SafeteycardData.Add(new Safetycard(100, 1, DateTime.Now, Sector.HR));
+
+            foreach (int cardId in new[] { 1, 2, 3, 4, 5, 6, 7, 8 })
+            {
+                Console.WriteLine($"Karte {cardId}: {control.Challenge(cardId)}");
+            }
         }
     }
 }
