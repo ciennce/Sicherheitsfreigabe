@@ -1,4 +1,4 @@
-﻿namespace Sicherheitsfreigabe
+﻿namespace Sicherheitsfreigabe.Enums
 {
     enum Sector
     {

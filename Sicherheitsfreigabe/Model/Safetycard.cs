@@ -1,4 +1,6 @@
-﻿namespace Sicherheitsfreigabe 
+﻿using Sicherheitsfreigabe.Enums;
+
+namespace Sicherheitsfreigabe.Model 
 {
     class Safetycard
     {

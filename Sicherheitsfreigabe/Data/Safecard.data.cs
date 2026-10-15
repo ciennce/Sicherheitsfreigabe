@@ -1,4 +1,7 @@
-namespace Sicherheitsfreigabe
+using Sicherheitsfreigabe.Enums;
+using Sicherheitsfreigabe.Model;
+
+namespace Sicherheitsfreigabe.Data
 {
     static class SafeteycardData
     {
@@ -22,13 +25,13 @@ namespace Sicherheitsfreigabe
 
         public static ReleaseLevel GetCardReleaselevel(int Id)
         {
-            return SafeteycardData.GetCard(Id)?
+            return GetCard(Id)?
                 .GetReleaseLevel() ?? ReleaseLevel.none;
         }
 
         public static Sector GetCardSector(int Id)
         {
-            return SafeteycardData.GetCard(Id)?
+            return GetCard(Id)?
                 .GetSector() ?? Sector.none;
         }
     }

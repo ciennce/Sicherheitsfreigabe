@@ -1,6 +1,7 @@
-﻿using Sicherheitsfreigabe.Model;
+﻿using Sicherheitsfreigabe.Data;
+using Sicherheitsfreigabe.Model;
 
-namespace Sicherheitsfreigabe
+namespace Sicherheitsfreigabe.Access
 {
     class ControlSection
     {

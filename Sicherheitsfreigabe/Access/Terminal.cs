@@ -1,6 +1,6 @@
 ﻿using Sicherheitsfreigabe.Model;
 
-namespace Sicherheitsfreigabe
+namespace Sicherheitsfreigabe.Access
 {
     class Terminal : ITerminal
     {
