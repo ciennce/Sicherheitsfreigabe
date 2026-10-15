@@ -22,7 +22,7 @@ namespace Sicherheitsfreigabe
             SafeteycardData.Add(new Safetycard(102, 3, DateTime.Now, Sector.logistic));
 
 
-            foreach (int cardId in new[] { 1, 2, 3, 4, 5, 6, 7, 8 })
+            foreach (int cardId in new[] { 100, 101, 102, 103})
             {
                 Console.WriteLine($"Karte {cardId}: {control.Challenge(cardId)}");
             }
