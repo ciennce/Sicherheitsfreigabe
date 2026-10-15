@@ -25,16 +25,5 @@ namespace Sicherheitsfreigabe
             card.UpdateLastUsed(DateTime.Now);
             return terminal.CanAccess(card, employee) ? terminal.Open() : terminal.Deny();
         }
-
-        public void Control(Safetycard card, Employee employee)
-        {
-            if (!terminal.CanAccess(card, employee))
-            {
-                employeeData.GetEmployee(employee.GetId());
-                terminal.Deny();
-                return;
-            }
-            terminal.Open();
-        }
     }
 }

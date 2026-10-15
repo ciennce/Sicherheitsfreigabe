@@ -57,5 +57,8 @@
         {
             lastUsed = time;
         }
+
+        public override string ToString()
+            => $"Karte {cardId}, Besitzer {ownerId}, Stufe {releaseLevel}, Bereich {Sector}, zuletzt {lastUsed}";
     }
 }
