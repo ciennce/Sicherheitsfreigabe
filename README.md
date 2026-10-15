@@ -124,7 +124,7 @@ Davor schon erledigt:
 ## Empfohlene Reihenfolge
 
 1. Seed-Daten nach der Tabelle oben anlegen: 10 Mitarbeiter + 10 Karten (Punkt 2).
-2. Schleife in `Main` auf die echten Karten-Ids umstellen, plus `999` als unbekannte Karte (Punkt 1).
+2. Neue Karten-Ids in die Schleife in `Main` aufnehmen, `103` durch `999` als unbekannte Karte ersetzen (Punkt 1).
 3. Programm laufen lassen und Ausgabe mit der Spalte „Erwartet“ vergleichen → das ist der Test für Schritt 8.
 4. `Control()` löschen, optional `ToString()` ergänzen (Punkte 3, 4).
 5. Aufräumen (Punkte 5–11), optional Protokollsystem.
