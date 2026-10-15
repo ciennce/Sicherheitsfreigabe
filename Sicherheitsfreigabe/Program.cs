@@ -6,6 +6,10 @@ namespace Sicherheitsfreigabe
     {
         static void Main(string[] args)
         {
+
+            //Dictionary<int> cards = new Dictionary<int, int>();
+
+
             DateTime now = DateTime.Now;
             DateTime today = DateTime.Today; 
 
@@ -46,14 +50,14 @@ namespace Sicherheitsfreigabe
 
             employees.Add(new Employee("Makar", 10, false, false, now, today));
             SafeteycardData.Add(new Safetycard(109, 10, DateTime.Now, Sector.marketing));
+            
 
 
 
-
-            foreach (int cardId in new[] { 100, 101, 102, 103})
-            {
-                Console.WriteLine($"Karte {cardId}: {control.Challenge(cardId)}");
-            }
+            //foreach (int cardId in SafeteycardData)
+            //{
+            //    Console.WriteLine($"Karte {cardId}: {control.Challenge(cardId)}");
+            //}
         }
     }
 }
