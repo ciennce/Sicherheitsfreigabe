@@ -14,5 +14,11 @@
         {
             return "Access granted";
         }
+
+        public static void GUI()
+        {
+            Console.WriteLine("[1]: Check if card can be used: (challange)");
+            Console.WriteLine();
+        }
     }
 }
