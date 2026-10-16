@@ -17,7 +17,7 @@
             employees.Add(new Employee("Max", 2, false, false, now, today));
             SafeteycardData.Add(new Safetycard(101, 2, DateTime.Now, Sector.HR));
 
-            employees.Add(new Employee("Yunus", 3, true, false, now, today));
+            employees.Add(new Employee("Yunus", 3, pIsOnBusinessTrip: true, pIsOnVacation: false, now, today));
             SafeteycardData.Add(new Safetycard(102, 3, DateTime.Now, Sector.HR));
 
             employees.Add(new Employee("Leander", 4, false, true, now, today));

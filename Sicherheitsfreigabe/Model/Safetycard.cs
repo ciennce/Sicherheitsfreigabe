@@ -2,28 +2,28 @@
 {
     class Safetycard
     {
-        private int cardId { get; set; }
+        public int CardId { get; private set;}
 
-        private int ownerId { get; set; }
+        private readonly int _ownerId; 
 
-        private DateTime lastUsed { get; set; }
+        private DateTime LastUsed { get; set; }
 
-        private ReleaseLevel releaseLevel { get; set; }
+        private ReleaseLevel _releaseLevel;
 
-        private Sector Sector { get; set; }
+        private Sector _Sector;
 
         public Safetycard(int pCardId, int pOwnerId, DateTime pLastUsed, Sector sector)
         {
-            cardId = pCardId;
-            ownerId = pOwnerId;
-            lastUsed = pLastUsed;
-            Sector = sector;
+            CardId = pCardId;
+            _ownerId = pOwnerId;
+            LastUsed = pLastUsed;
+            _Sector = sector;
             AddReleaseLevel();
         }
 
         private void AddReleaseLevel()
         {
-            releaseLevel = Sector switch
+            _releaseLevel = _Sector switch
             {
                 Sector.HR => ReleaseLevel.red,
                 Sector.logistic => ReleaseLevel.blue,
@@ -35,30 +35,30 @@
 
         public int GetSafetycard()
         {
-            return cardId;
+            return CardId;
         }
 
         public ReleaseLevel GetReleaseLevel()
         {
-            return releaseLevel;
+            return _releaseLevel;
         }
 
         public Sector GetSector()
         {
-            return Sector;
+            return _Sector;
         }
 
         public int GetOwnerId()
         {
-            return ownerId;
+            return _ownerId;
         }
 
         public void UpdateLastUsed(DateTime time)
         {
-            lastUsed = time;
+            LastUsed = time;
         }
 
         public override string ToString()
-            => $"Karte {cardId}, Besitzer {ownerId}, Stufe {releaseLevel}, Bereich {Sector}, zuletzt {lastUsed}";
+            => $"Karte {CardId}, Besitzer {_ownerId}, Stufe {_releaseLevel}, Bereich {_Sector}, zuletzt {LastUsed}";
     }
 }

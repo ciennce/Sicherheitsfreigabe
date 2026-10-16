@@ -12,7 +12,7 @@
 
         public string Open()
         {
-            return "Access granted";
+            return $"Access granted";
         }
 
         public static void GUI()
