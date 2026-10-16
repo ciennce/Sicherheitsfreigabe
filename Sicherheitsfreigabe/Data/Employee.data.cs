@@ -1,5 +1,3 @@
-using Sicherheitsfreigabe.Model;
-
 namespace Sicherheitsfreigabe.Data
 {
     class EmployeeData

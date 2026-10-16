@@ -1,6 +1,3 @@
-using Sicherheitsfreigabe.Enums;
-using Sicherheitsfreigabe.Model;
-
 namespace Sicherheitsfreigabe.Data
 {
     static class SafeteycardData

@@ -1,8 +1,4 @@
-﻿using Sicherheitsfreigabe.Data;
-using Sicherheitsfreigabe.Enums;
-using Sicherheitsfreigabe.Model;
-
-namespace Sicherheitsfreigabe
+﻿namespace Sicherheitsfreigabe
 {
     class Program
     {
@@ -13,7 +9,7 @@ namespace Sicherheitsfreigabe
 
 
             DateTime now = DateTime.Now;
-            DateTime today = DateTime.Today; 
+            DateTime today = DateTime.Today;
 
             var employees = new EmployeeData();
             var control = new ControlSection(employees);
@@ -56,7 +52,7 @@ namespace Sicherheitsfreigabe
 
 
 
-            foreach (int cardId in new[] { 100, 101, 102, 103, 104, 105, 106, 107, 108, 109})
+            foreach (int cardId in new[] { 100, 101, 102, 103, 104, 105, 106, 107, 108, 109 })
             {
                 Console.WriteLine($"Karte {cardId}: {control.Challenge(cardId)}");
             }

@@ -1,7 +1,4 @@
-﻿using Sicherheitsfreigabe.Data;
-using Sicherheitsfreigabe.Model;
-
-namespace Sicherheitsfreigabe.Access
+﻿namespace Sicherheitsfreigabe.Access
 {
     class ControlSection
     {
@@ -18,7 +15,7 @@ namespace Sicherheitsfreigabe.Access
         public string Challenge(int cardId)
         {
             var card = SafeteycardData.GetCard(cardId);
-            if (card == null) return terminal.Deny();               
+            if (card == null) return terminal.Deny();
 
             var employee = employeeData.GetEmployee(card.GetOwnerId());
             if (employee == null) return terminal.Deny();

@@ -1,6 +1,4 @@
-﻿using Sicherheitsfreigabe.Enums;
-
-namespace Sicherheitsfreigabe.Model 
+﻿namespace Sicherheitsfreigabe.Model
 {
     class Safetycard
     {
@@ -14,7 +12,7 @@ namespace Sicherheitsfreigabe.Model
 
         private Sector Sector { get; set; }
 
-        public Safetycard(int pCardId, int pOwnerId, DateTime pLastUsed, Sector sector  )
+        public Safetycard(int pCardId, int pOwnerId, DateTime pLastUsed, Sector sector)
         {
             cardId = pCardId;
             ownerId = pOwnerId;
